@@ -46,12 +46,16 @@ and creates a blackjack game.
       
          if (scanner.hasNextInt())
          {
-            playerCount = scanner.nextInt();       
+            playerCount = scanner.nextInt();
+            if (playerCount <= 0)
+            {
+               System.out.println("Please enter a positive number");      
+            }
             scanner.nextLine();
          }
          else
          {
-            System.out.println("Please enter a positive number");
+            System.out.println("Please enter a number");
          }
       }
   
@@ -99,6 +103,8 @@ Runs the game and all of its logic.
          for (Player player : players)
          {
             System.out.println(player.getName() + " wins: " + player.getWins());
+            System.out.println("$" + player.getMoney() + " remaining");
+            System.out.println();
          }
         
          System.out.println();
@@ -116,6 +122,60 @@ Runs the game and all of its logic.
                player.addCard(deck.deal());
             }
          }  
+         
+         
+         /**
+         Each players places their bets.
+         */
+         
+         /**
+Puts money amount that player enters into pot and removes
+from player
+
+   
+   public void putMoneyInPot(int betAmount)
+   {
+      pot = betAmount;
+      money -= betAmount;
+   }
+*/
+
+         System.out.println("Onto betting");
+
+         for (Player player: players)
+         {
+            System.out.println("How much would you like to bet, " + player.getName() + "?");
+            int bettingAmount = 0;
+            
+            while (bettingAmount <= 0 || bettingAmount > player.getMoney())
+            {
+               Scanner scanner = new Scanner(System.in);
+            
+               if (scanner.hasNextInt())
+               {
+                  bettingAmount = scanner.nextInt();
+                  scanner.nextLine();
+                  
+                  if (bettingAmount < 0)
+                  {
+                     System.out.println("Please enter a positive number");
+                  }
+                  else if (bettingAmount > player.getMoney())
+                  {
+                     System.out.println("You do not have enough money for this. Please enter a new value.");
+                  }
+                  else
+                  {  
+                     player.putMoneyInPot(bettingAmount);
+                  }
+               }
+               else
+               {
+                  System.out.println("Please enter a number");
+               }
+            }
+         }
+                        
          
          
          /**
@@ -161,44 +221,88 @@ Runs the game and all of its logic.
 
          for (Player player : players)
          {
+            //Case that player has more points, within accepted range, than dealer
             if (dealerPoints < player.getHandValue() && player.getHandValue() <= 21)
             {
                player.isWinner();
                System.out.println(player.getName() + " won!");
+               
+               if (player.isBlackjack() == true)
+               {
+                  player.blackjackWin();
+               }
+               else
+               {
+                  player.regularWin();
+               }
+               
+               player.resetPot();
+               
             }
             
+            //Case that both players have same point values
             else if (dealerPoints == player.getHandValue() && player.getHandValue() <= 21)
             {
+               //If dealer has blackjack but player doesn't, dealer gets priority
                if (dealer.isBlackjack() == true && player.isBlackjack() == false)
                {
                   dealer.isWinner();
+                  player.resetPot();
                }
-               
+               //If player has priority and dealer doesn't, player has priority
                else if (dealer.isBlackjack() == false && player.isBlackjack() == true)
                {
                   player.isWinner();
-               } 
-               
-               System.out.println("It's a tie for " + player.getName() + "!");
+                  player.blackjackWin();
+                  player.resetPot();
+               }
+               //If both have blackjack or neither has blackjack, it's a tie
+               else
+               { 
+                  System.out.println("It's a tie for " + player.getName() + "!");
+                  player.tieMoney();
+                  player.resetPot();
+               }
             }
-            
+            //If dealer has more points, within accepted range, than player
             else if (dealerPoints > player.getHandValue() && dealerPoints <= 21)
             {
                dealer.isWinner();
                System.out.println("Dealer won!");
+               player.resetPot();
             }
             
+            //If dealer busts and player does not
             else if (player.getHandValue() <= 21 && dealerPoints > 21)
             {
                player.isWinner();
+               
+               if (player.isBlackjack() == true)
+               {
+                  player.blackjackWin();
+               }
+               else
+               {
+                  player.regularWin();
+               }
+               
+               player.resetPot();            
+               
                System.out.println(player.getName() + " won!");
             }
-            
+            //If player busts and dealer does not
             else if (dealerPoints <= 21 && player.getHandValue() > 21)
             {
                dealer.isWinner();
                System.out.println("Dealer won!");
-            } 
+               player.resetPot();
+            }
+            //If everyone busts, nobody wins but player loses money
+            else if (dealerPoints > 21 && player.getHandValue() > 21)
+            {
+               System.out.println("Nobody ever truly wins in this cruel world, except maybe another player");
+               player.resetPot();                
+            }
          }
          
          
@@ -308,6 +412,7 @@ Shows the dealer's hand minus one, which is hidden from players.
       for (int i=0; i<dealerHand.size()-1; i++)
       {
          System.out.println(dealerHand.get(i));
+         
       }
    }
 
@@ -376,6 +481,9 @@ class Player
    private Hand hand;
    private String name;
    private int win;
+   private int money;
+   private int pot;
+   private boolean playing;
    
 /**
 The constructor creates the hand based off a deck entered into it. (at least for testing)
@@ -385,6 +493,8 @@ The constructor creates the hand based off a deck entered into it. (at least for
       hand = new Hand();
       name = playerName;
       win = 0;
+      money = 1000;
+      playing = false;
    }
 
 /**
@@ -451,6 +561,15 @@ Returns the name of the player
    }
 
 /**
+Returns the amount of money a player has
+*/
+
+   public int getMoney()
+   {
+      return money;
+   }
+
+/**
 Empties the player's hand
 */   
    public void clearHand()
@@ -481,12 +600,68 @@ Returns whether hand is a blackjack
    {
       return hand.isBlackjack();
    }   
-}  
 
+/**
+Tells whether player is out of money
+*/
+   public boolean isOutOfMoney()
+   {
+      if (money <= 0)
+      {   
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
 
+/**
+Puts money amount that player enters into pot and removes
+from player
+*/
+   
+   public void putMoneyInPot(int betAmount)
+   {
+      pot = betAmount;
+      money -= betAmount;
+   }
 
+/**
+Resets a player's bet to 0 to use at the end of each round
+*/
+   
+   public void resetPot()
+   {
+      pot = 0;
+   }
+   
+/**
+Adds 1.5x money for a player who has a blackjack when dealer does not. Logic applied in the game function
+*/   
+   public void blackjackWin()
+   {
+      money += (pot + 1.5 * pot);
+   }
+   
+/**
+Adds money for a player who has won. Logic of when used applied in the game function
+*/   
+   
+   public void regularWin()
+   {
+      money += (2 * pot);
+   }
 
+/**
+Returns money to player from pot when it is a tie
+*/
 
+   public void tieMoney()
+   {
+      money += pot;
+   }
+}
 
 
 /**
@@ -498,6 +673,7 @@ class Card
  	String suit = "";
   	String rank = "";
   	int pointValue = 0;
+   boolean isFaceUp;
 
 /**
 Constructs the card with its suit, rank, and pointValue.
@@ -507,6 +683,7 @@ Constructs the card with its suit, rank, and pointValue.
   		suit =  suitOfCard;
   		rank = cardRank;
   		pointValue = valueOfCard;
+      isFaceUp = false;
   	}
 
 /**
@@ -551,6 +728,12 @@ to switch its pointValue to 1.
          pointValue = 1;
   		   return pointValue;
   	}
+   
+   public void makeFaceUp()
+   {
+      isFaceUp = true;
+   }
+   
 }
 
 
@@ -734,25 +917,31 @@ to see if Ace should change from 11 points to 1 point.
          sumOfValues = sumOfValues + card.getValue();
       }
       
-      
+      //Checks for aces to change their values if necessary
       if (aceCounter > 0)
       {
+         
+         //Only need to change if the sumOfValues is > 21
          if (sumOfValues > 21)
          {
-            sumOfValues = 0;
          
+            //For each card in the hand
             for (Card card : cards)
             {
-               if (card.getRank().equals("Ace"))
+               
+               //Check if this card is an ace and that it hasn't already been set to a value of 1
+               if (card.getRank().equals("Ace") && card.getValue() != 1)
                {
-                  if (card.getValue() + (aceCounter*11) > 21)
+                  
+                  //If the current sum is > 21, set the Ace to a value of 1 and decrease sum by 10.
+                  //Reduce aceCounter by 1 so that when no more aces can be changed again, this part of code doesn't run
+                  if (sumOfValues > 21)
                   {   
                      card.setValue();
                      aceCounter--;
+                     sumOfValues -= 10;
                   }
                }
-                     
-               sumOfValues = sumOfValues + card.getValue();
             }
          }
       }    
