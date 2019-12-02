@@ -142,12 +142,17 @@ from player
 
          System.out.println("Onto betting");
 
-         for (Player player: players)
+         for (Player player : players)
          {
             System.out.println("How much would you like to bet, " + player.getName() + "?");
             int bettingAmount = 0;
+            int amountOfMoneyHad = player.getMoney();
             
-            while (bettingAmount <= 0 || bettingAmount > player.getMoney())
+            System.out.println(player.getName() + ": " + amountOfMoneyHad);
+            
+            
+            
+            while (bettingAmount <= 0 || bettingAmount > amountOfMoneyHad)
             {
                Scanner scanner = new Scanner(System.in);
             
@@ -156,11 +161,11 @@ from player
                   bettingAmount = scanner.nextInt();
                   scanner.nextLine();
                   
-                  if (bettingAmount < 0)
+                  if (bettingAmount <= 0)
                   {
                      System.out.println("Please enter a positive number");
                   }
-                  else if (bettingAmount > player.getMoney())
+                  else if (bettingAmount > amountOfMoneyHad)
                   {
                      System.out.println("You do not have enough money for this. Please enter a new value.");
                   }
@@ -246,12 +251,14 @@ from player
                //If dealer has blackjack but player doesn't, dealer gets priority
                if (dealer.isBlackjack() == true && player.isBlackjack() == false)
                {
+                  System.out.println(player.getName() + " lost.");
                   dealer.isWinner();
                   player.resetPot();
                }
                //If player has priority and dealer doesn't, player has priority
                else if (dealer.isBlackjack() == false && player.isBlackjack() == true)
                {
+                  System.out.println(player.getName() + " won!");
                   player.isWinner();
                   player.blackjackWin();
                   player.resetPot();
@@ -259,7 +266,7 @@ from player
                //If both have blackjack or neither has blackjack, it's a tie
                else
                { 
-                  System.out.println("It's a tie for " + player.getName() + "!");
+                  System.out.println("It's a tie for " + player.getName() + " and Dealer!");
                   player.tieMoney();
                   player.resetPot();
                }
@@ -268,7 +275,7 @@ from player
             else if (dealerPoints > player.getHandValue() && dealerPoints <= 21)
             {
                dealer.isWinner();
-               System.out.println("Dealer won!");
+               System.out.println(player.getName() + " lost.");
                player.resetPot();
             }
             
@@ -294,13 +301,13 @@ from player
             else if (dealerPoints <= 21 && player.getHandValue() > 21)
             {
                dealer.isWinner();
-               System.out.println("Dealer won!");
+               System.out.println(player.getName() + " lost!");
                player.resetPot();
             }
             //If everyone busts, nobody wins but player loses money
             else if (dealerPoints > 21 && player.getHandValue() > 21)
             {
-               System.out.println("Nobody ever truly wins in this cruel world, except maybe another player");
+               System.out.println("Both " + player.getName() + " and Dealer lost.");
                player.resetPot();                
             }
          }
@@ -316,6 +323,27 @@ from player
          }
          
          dealer.clearHand();
+         
+         for (Player player : new ArrayList<Player>(players))
+         {
+            if (player.getMoney() <= 0)
+            {
+               System.out.println(player.getName() + " has run out of money like the idiot (s)he is. Okay, byebye.");
+               players.remove(player);
+            }
+         }
+         
+         /*
+         for (Player player : players)
+         {
+            if (player.getMoney() <= 0)
+            {
+               System.out.println(player.getName() + " has run out of money like the idiot (s)he is. Okay, byebye.");
+               players.remove(player);
+            }
+         }
+         **/      
+         
          
          /**
          Asks if person wants to play again
