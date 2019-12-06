@@ -1,20 +1,117 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Mohnish
+ */
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.awt.Graphics;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.ServerAddress;
 
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection;
+
+import org.bson.Document;
+import java.util.Arrays;
+import com.mongodb.Block;
+
+import com.mongodb.client.MongoCursor;
+import static com.mongodb.client.model.Filters.*;
+import com.mongodb.client.result.DeleteResult;
+import static com.mongodb.client.model.Updates.*;
+import com.mongodb.client.result.UpdateResult;
+import java.util.ArrayList;
+import java.util.List;
 /**
-@author: Shaivya Gupta
-Tests out the blackjack game.
-*/
+ *
+ * @author Mohnish
+ */
+enum State 
+{
+    TITLE_SCREEN, CREATE_ACCOUNT, LOGIN, LOGOUT, ROOM_SELECT, PLAY_GAME, EXIT
+}
+
 
 public class BlackJackTester_Gupta
 {   
    public static void main(String[] args)
    {
-      Blackjack game = new Blackjack();
-      game.game();      
+      MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+      MongoDatabase database = mongoClient.getDatabase("blackjackaccounts");
+      MongoCollection<Document> collection = database.getCollection("accounts");
+      String username = "";
+      boolean loggedIn = false;
+      
+      
+      State state = State.TITLE_SCREEN;
+      
+      //NICOLE AND MOHNISH
+      //In each state, except play game state, remember to check if user presses x, it goes to a popup menu that asks if they are sure
+      //If sure == true, then state = exit; then next loop, main is exited
+      while (state != State.EXIT)
+      {
+        switch(state)
+        {
+            case TITLE_SCREEN:
+                if (loggedIn == true)
+                {
+                    
+                }
+                else
+                {
+                    
+                }
+                break;
+            //NICOLE AND MOHNISH: Figure out how to enter account creation data to MongoDB collection users
+            //Make sure to error check that username doesn't already exist in database
+            case CREATE_ACCOUNT:
+                break;
+            case ROOM_SELECT:
+                
+                
+                //if 
+                break;
+            
+            case PLAY_GAME: 
+               Blackjack game = new Blackjack();    
+               game.game();
+            case EXIT:
+                break;
+            case LOGIN:
+                Scanner scanner1 = new Scanner(System.in);
+                Scanner scanner2 = new Scanner(System.in);
+                
+                String usernameEntered = scanner1.nextLine();
+                String passwordEntered = scanner2.nextLine();
+                
+                //Check with MongoDB to ensure that both username entered and password entered are correct
+                //if (userNameEntered == )
+                  
+                
+                
+                break;
+            case LOGOUT:
+                break;
+        }
+      }
+    
+            
    }
 }   
+
 
 /**
 This class creates a blackjack table with players, dealer,
@@ -26,7 +123,16 @@ class Blackjack
    private ArrayList<Player> players;
    private Dealer dealer;
    private int playerCount;
-
+   
+   void GetRoom(Player player)
+   {
+       if (player.getMoney() >= 20000)
+               {
+                   //Fill with MongoDB Info: Create a new building in "Buildings" collection with username stored
+                   player.buyGameRoom(20000);
+                   
+               }
+   }
 /**
 Creates the deck and shuffles it, adds player list, asks for # of players,
 and creates a blackjack game.
@@ -80,6 +186,9 @@ Runs the game and all of its logic.
    {      
       boolean playAgain = true; 
       
+      
+          
+      
       while (playAgain == true)
       {
          
@@ -131,7 +240,6 @@ Runs the game and all of its logic.
          /**
 Puts money amount that player enters into pot and removes
 from player
-
    
    public void putMoneyInPot(int betAmount)
    {
@@ -367,6 +475,7 @@ from player
       }
     }
 }     
+   
         
       
       
@@ -512,6 +621,7 @@ class Player
    private int money;
    private int pot;
    private boolean playing;
+   
    
 /**
 The constructor creates the hand based off a deck entered into it. (at least for testing)
@@ -688,6 +798,16 @@ Returns money to player from pot when it is a tie
    public void tieMoney()
    {
       money += pot;
+   }
+   
+   public void buyGameRoom(int money)
+   {
+       this.money -= money;
+   }
+   
+   public void addMoneyToGameRoom(int money)
+   {
+       this.money -= money;       
    }
 }
 
@@ -1049,3 +1169,12 @@ to be filled again
       return false;
    }
 }
+    /**
+     * @param args the command line arguments
+     */
+
+        // TODO code application logic here
+    
+    
+
+
