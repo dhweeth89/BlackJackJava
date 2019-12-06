@@ -1,3 +1,4 @@
 # BlackJackJava
 For EC327 Project
-Because everybody loves gambling.
+
+\nBecause everybody loves gambling.
