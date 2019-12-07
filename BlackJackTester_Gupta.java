@@ -16,6 +16,7 @@
 
 import java.util.ArrayList;
 import java.util.Scanner;
+/*
 import java.awt.Graphics;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -35,32 +36,35 @@ import static com.mongodb.client.model.Updates.*;
 import com.mongodb.client.result.UpdateResult;
 import java.util.ArrayList;
 import java.util.List;
+*/
 /**
  *
  * @author Mohnish
  */
-enum State 
-{
-    TITLE_SCREEN, CREATE_ACCOUNT, LOGIN, LOGOUT, ROOM_SELECT, PLAY_GAME, EXIT
-}
+//enum State
+//{
+    //TITLE_SCREEN, CREATE_ACCOUNT, LOGIN, LOGOUT, ROOM_SELECT, PLAY_GAME, EXIT
+//}
 
 
 public class BlackJackTester_Gupta
-{   
+{
    public static void main(String[] args)
    {
-      MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-      MongoDatabase database = mongoClient.getDatabase("blackjackaccounts");
-      MongoCollection<Document> collection = database.getCollection("accounts");
-      String username = "";
-      boolean loggedIn = false;
+      //MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+      //MongoDatabase database = mongoClient.getDatabase("blackjackaccounts");
+      //MongoCollection<Document> collection = database.getCollection("accounts");
+      //String username = "";
+      //boolean loggedIn = false;
+
       
-      
-      State state = State.TITLE_SCREEN;
+     // State state = State.TITLE_SCREEN;
       
       //NICOLE AND MOHNISH
       //In each state, except play game state, remember to check if user presses x, it goes to a popup menu that asks if they are sure
       //If sure == true, then state = exit; then next loop, main is exited
+      //state = State.PLAY_GAME
+              /*
       while (state != State.EXIT)
       {
         switch(state)
@@ -77,6 +81,7 @@ public class BlackJackTester_Gupta
                 break;
             //NICOLE AND MOHNISH: Figure out how to enter account creation data to MongoDB collection users
             //Make sure to error check that username doesn't already exist in database
+           /*
             case CREATE_ACCOUNT:
                 break;
             case ROOM_SELECT:
@@ -84,10 +89,11 @@ public class BlackJackTester_Gupta
                 
                 //if 
                 break;
-            
-            case PLAY_GAME: 
+            */
+            //case PLAY_GAME:
                Blackjack game = new Blackjack();    
                game.game();
+               /*
             case EXIT:
                 break;
             case LOGIN:
@@ -105,12 +111,11 @@ public class BlackJackTester_Gupta
                 break;
             case LOGOUT:
                 break;
+                */
         }
       }
     
             
-   }
-}   
 
 
 /**
