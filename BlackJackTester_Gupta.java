@@ -50,8 +50,12 @@ public class BlackJackTester_Gupta
    public static void main(String[] args)
    {
       MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-      MongoDatabase database = mongoClient.getDatabase("blackjackaccounts");
+      MongoDatabase database = mongoClient.getDatabase("blackjack");
       MongoCollection<Document> collection = database.getCollection("accounts");
+      Document user = new Document("username", "MongoDB")
+                .append("password", "database")
+                .append("money", 10);
+      collection.insertOne(user);
       String username = "";
       boolean loggedIn = false;
       
