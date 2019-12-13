@@ -84,7 +84,7 @@ class Signup
         if (this.Authentication(user))
         {
         MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-        MongoDatabase database = mongoClient.getDatabase("MongoTester");
+        MongoDatabase database = mongoClient.getDatabase("blackjack");
         MongoCollection<Document> collection = database.getCollection("accounts");
         
         
@@ -135,7 +135,7 @@ class Signup
     public static boolean Authentication(String input)
     {
         MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-        MongoDatabase database = mongoClient.getDatabase("MongoTester");
+        MongoDatabase database = mongoClient.getDatabase("blackjack");
         MongoCollection<Document> collection = database.getCollection("accounts");
                    
             Document document = collection
@@ -188,15 +188,15 @@ class Signup
     }
     
 }
-/*
+
 class Login
 {
     public Login()
     {
-    MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-    MongoDatabase database = mongoClient.getDatabase("blackjack");
-    MongoCollection<Document> collection = database.getCollection("accounts");    
-  
+        MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+        MongoDatabase database = mongoClient.getDatabase("blackjack");
+        MongoCollection<Document> collection = database.getCollection("accounts");    
+    /*
     Scanner input = new Scanner(System.in);
     System.out.println("Please enter your username:");
     String username  = input.nextLine();
@@ -204,68 +204,57 @@ class Login
     Scanner pw = new Scanner(System.in);
     System.out.println("Please enter your password:");
     String password = pw.nextLine();
+    */
+    }
     
-    if (AuthenticateUsername(username) == true && AuthenticatePassword(username, password) == true)
+    public boolean LoginSuccessOrNah(String username, String password) throws NoSuchAlgorithmException
     {
-        System.out.println("You have successfully logged in!");
+        if (this.AuthenticateInputs(username, password))
+        {
+            MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+            MongoDatabase database = mongoClient.getDatabase("blackjack");
+            MongoCollection<Document> collection = database.getCollection("accounts");
+            
+            System.out.println("Login Successful!");
+            return true;
+        } 
+        else 
+        {
+            return false;
+        }
+        
     }
     
-    else
-    {
-        System.out.println("One or more of the fields you have entered are incorrect.");
-    }
-    
-    }
-    
-    public static boolean AuthenticateUsername(String input)
+    public static boolean AuthenticateInputs(String user, String pass) throws NoSuchAlgorithmException
     {
     MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
     MongoDatabase database = mongoClient.getDatabase("blackjack");
     MongoCollection<Document> collection = database.getCollection("accounts");
     
+   // Document myDoc = (Document) collection.find().projection(fields(include("username", user), excludeId()));
+    //String x = getStringFromDocument(myDoc);
     
-    Document myDoc = collection.find(eq("username", input)).first();
-    String x = getStringFromDocument(myDoc);
+    Document document = collection
+            .find(new BasicDBObject("username", user))
+                .projection(Projections.fields(Projections.include("password"), Projections.excludeId())).first();
     
-    if (x == input)
+    String x = document.getString("password");
+    
+    //Document myDoc2 = (Document) collection.find().projection(fields(include("password", pass), excludeId()));
+    //String y = getStringFromDocument(myDoc2);
+    if (document == null)
+    {
+        System.out.println("Incorrect!");
+        return false;
+    }
+    else if (x.equals(toHexString(getSHA(pass))))
     {
         return true;
     }
-    
-    else 
+    else
     {
         return false;
-    }
-    }
-    
-    public static boolean AuthenticatePassword(String username, String password)
-    {
-    MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-    MongoDatabase database = mongoClient.getDatabase("blackjack");
-    MongoCollection<Document> collection = database.getCollection("accounts");
-    
-    Document myDoc = (Document) collection.find().projection(fields(include("username", username), excludeId()));
-    String x = getStringFromDocument(myDoc);
-    
-    
-    
-    Document myDoc2 = (Document) collection.find().projection(fields(include("password", password), excludeId()));
-    String y = getStringFromDocument(myDoc2);
-    
-    
-    
-    
-    
-  //  BasicDBObject criteria = new BasicDBObject();
-   // criteria.append("username", username);
-   // criteria.append("password", password);
-    
-   // DBCursor cur = collection.find(criteria);
-   // Document myDoc = collection.find(eq(criteria));
-   // String x = getStringFromDocument(myDoc); 
-    
-    
-    
+    } 
     
     }
     
@@ -288,5 +277,105 @@ class Login
     }
     }
     
+    public static byte[] getSHA(String input) throws NoSuchAlgorithmException 
+    {  
+        // Static getInstance method is called with hashing SHA  
+        MessageDigest md = MessageDigest.getInstance("SHA-256");  
+  
+        // digest() method called  
+        // to calculate message digest of an input  
+        // and return array of byte 
+        return md.digest(input.getBytes(StandardCharsets.UTF_8));  
+    } 
+    
+    public static String toHexString(byte[] hash) 
+    { 
+        // Convert byte array into signum representation  
+        BigInteger number = new BigInteger(1, hash);  
+  
+        // Convert message digest into hex value  
+        StringBuilder hexString = new StringBuilder(number.toString(16));  
+  
+        // Pad with leading zeros 
+        while (hexString.length() < 32)  
+        {  
+            hexString.insert(0, '0');  
+        }  
+  
+        return hexString.toString();  
+    }
+    
+    
+    
 }
-*/
+
+class Building
+{
+    public Building()
+    {
+        MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+        MongoDatabase database = mongoClient.getDatabase("Building");
+        MongoCollection<Document> collection = database.getCollection("Rooms");
+    }
+    
+    public boolean CreateRoom(String owner)
+    {
+        if (this.UserRichEnough(owner))
+        {
+            MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+            MongoDatabase database = mongoClient.getDatabase("Building");
+            MongoCollection<Document> collection = database.getCollection("Rooms");
+            int money = 20000;
+            
+            Scanner input = new Scanner(System.in);
+            System.out.println("What would you like your room to named?:");
+            String RoomName  = input.nextLine();
+                    
+            
+            Document Room = new Document("owner", owner)
+                    .append("Room Name", RoomName)
+                .append("money", money);
+            collection.insertOne(Room);
+            
+            return true;   
+        }
+        else 
+        {
+            return false;
+        }
+    }
+    
+    public static boolean UserRichEnough(String username)
+    {
+        MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+        MongoDatabase database = mongoClient.getDatabase("blackjack");
+        MongoCollection<Document> collection = database.getCollection("accounts");
+        
+        Document document = collection
+            .find(new BasicDBObject("username", username))
+                .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
+        
+        if(document == null)
+        {
+            return false;
+        }
+        else if(document != null)
+        {
+            int money = document.getInteger("money");
+            
+            if (money >= 20000)
+            {
+                money = money - 20000;
+                collection.updateOne(eq("username", username), new Document("$set", new Document("money", money)));
+                return true;
+            }
+            else 
+            {
+                return false;
+            }
+        }
+        else
+            return false;
+    }
+    
+}
