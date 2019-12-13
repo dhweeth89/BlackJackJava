@@ -24,7 +24,7 @@ public class Rank {
       Collections.unmodifiableList( Arrays.asList( new Rank[] { ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN,
                                      EIGHT, NINE, TEN, JACK, QUEEN, KING } ) );
    
-   private Rank( String nameValue, String symbolValue ) {
+   public Rank(String nameValue, String symbolValue) {
       name = nameValue;
       symbol = symbolValue;
    }

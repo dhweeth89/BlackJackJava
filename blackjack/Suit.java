@@ -16,7 +16,7 @@ public final class Suit {
       Collections.unmodifiableList( 
          Arrays.asList( new Suit[] { CLUBS, DIAMONDS, HEARTS, SPADES } ) );
 
-   private Suit( String nameValue, String symbolValue ) {
+   public Suit(String nameValue, String symbolValue) {
       name = nameValue;
       symbol = symbolValue;
    }
