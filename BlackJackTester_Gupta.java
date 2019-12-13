@@ -21,6 +21,7 @@ import java.util.Scanner;
 
 public class BlackJackTester_Gupta extends Application {
    Blackjack game = new Blackjack(); //get number of players
+
    int playercount = 4; // plug in number of players
    FlowPane cards = new FlowPane(Orientation.HORIZONTAL);
    FlowPane dealerCards = new FlowPane(Orientation.HORIZONTAL);
