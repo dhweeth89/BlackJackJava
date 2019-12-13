@@ -1,63 +1,56 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Mohnish
- */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.awt.Graphics;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.ServerAddress;
 
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoCollection;
-
-import org.bson.Document;
-import java.util.Arrays;
-import com.mongodb.Block;
-
-import com.mongodb.client.MongoCursor;
-import static com.mongodb.client.model.Filters.*;
-import com.mongodb.client.result.DeleteResult;
-import static com.mongodb.client.model.Updates.*;
-import com.mongodb.client.result.UpdateResult;
-import java.util.ArrayList;
-import java.util.List;
 /**
- *
- * @author Mohnish
- */
-enum State 
-{
-    TITLE_SCREEN, CREATE_ACCOUNT, LOGIN, LOGOUT, ROOM_SELECT, PLAY_GAME, EXIT
-}
+@author: Shaivya Gupta
+Tests out the blackjack game.
+*/
 
-
+//# MAIN FUNCTION
 public class BlackJackTester_Gupta
 {   
    public static void main(String[] args)
    {
+      
+       
+      Blackjack game = new Blackjack();
+      game.game(); 
+      
+    /**  
       MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-      MongoDatabase database = mongoClient.getDatabase("blackjack");
+      MongoDatabase database = mongoClient.getDatabase("blackjackaccounts");
       MongoCollection<Document> collection = database.getCollection("accounts");
-      Document user = new Document("username", "MongoDB")
-                .append("password", "database")
-                .append("money", 10);
-      collection.insertOne(user);
       String username = "";
+      int money = 0;
       boolean loggedIn = false;
+
+        public enum state
+        {
+            TITLE_SCREEN,
+            CREATE_ACCOUNT,
+            MANAGE_ROOMS,
+            ROOM_SELECT,
+            PLAY_GAME,
+            EXIT,
+            LOGIN,
+            LOGOUT
+        }
+
+      String usureusure = "";
+      bool okiedokie = false;
+
+
+        //note:   b for BACK BUTTON
+        //        r for START
+        //        c for CREATE
+        //        m for MANAGE
+        //        x for EXIT
+        //        i for LOGIN
+        //        o for LOGOUT
+
+
       
       
       State state = State.TITLE_SCREEN;
@@ -70,26 +63,268 @@ public class BlackJackTester_Gupta
         switch(state)
         {
             case TITLE_SCREEN:
+                Scanner scannr = new Scanner(System.in);
+                String state1 = scannr.nextLine();
+
+
+                //@MOHNISH THIS ONEʻS FOR YOU BROO
+                //username = ??
+                //money == ??
+
                 if (loggedIn == true)
                 {
-                    
+
+                    if (state1 == "r") //when start button is pressed, returns r for room select
+                        {
+                            state = State.ROOM_SELECT;
+                        }
+                    else if (state1 == "c")
+                        {
+                            state = State.CREATE_ACCOUNT;
+                        }
+                    else if (state1 == "m")
+                        {
+                            state = State.MANAGE_ROOMS;
+                        }
+                    else if (state1 == "o")
+                        {
+                            state = State.LOGOUT;
+                        }
+                    else if (state1 == "x")
+                        {
+                             Scanner input = new Scanner(System.in);
+                             System.out.println("Are you sure you would like to quit?");
+                             usureusure  = input.nextLine();
+
+                            okiedokie = false;
+                            while (okiedokie == false)
+                            {
+                                 if (usureusure == "y")
+                                     {
+                                         okiedokie = true;
+                                         state = State.EXIT;
+                                     }
+                                 else if (usureusure == "n")
+                                     {
+                                         okiedokie = true;
+                                         state = State.TITLE_SCREEN;
+                                     }
+                                 else
+                                    {
+                                         Scanner input = new Scanner(System.in);
+                                         System.out.println("Just a simple yes or no would suffice...");
+                                         usureusure  = input.nextLine();
+                                    }
+                            }
+
+                        }
                 }
-                else
+                else //not logged in, main menue @ author NicoleSUx
                 {
-                    
+                    if (state1 == "r")
+                        {
+                            state = State.ROOM_SELECT;
+                        }
+                    else if (state1 == "c")
+                        {
+                            state = State.CREATE_ACCOUNT;
+                        }
+                    else if (state1 == "i")
+                        {
+                            state = State.LOGIN;
+                        }
+                     else if (state1 == "x")
+                        {
+                             Scanner input = new Scanner(System.in);
+                             System.out.println("Are you sure you would like to quit?");
+                             usureusure  = input.nextLine();
+
+                            okiedokie = false;
+                            while (okiedokie == false)
+                            {
+                                 if (usureusure == "y")
+                                     {
+                                         okiedokie = true;
+                                         state = State.EXIT;
+                                     }
+                                 else if (usureusure == "n")
+                                     {
+                                         okiedokie = true;
+                                         state = State.TITLE_SCREEN;
+                                     }
+                                 else
+                                    {
+                                         Scanner input = new Scanner(System.in);
+                                         System.out.println("Just a simple yes or no would suffice...");
+                                         usureusure  = input.nextLine();
+                                    }
+                            }
+
+                        }
                 }
                 break;
             //NICOLE AND MOHNISH: Figure out how to enter account creation data to MongoDB collection users
             //Make sure to error check that username doesn't already exist in database
             case CREATE_ACCOUNT:
+                //CREATE ACCOUNT FUNCTION HERE
+
+                Scanner scannr = new Scanner(System.in);
+                String state1 = scannr.nextLine();
+
+                 if (state1 == "x")
+                        {
+                             Scanner input = new Scanner(System.in);
+                             System.out.println("Are you sure you would like to quit?");
+                             usureusure  = input.nextLine();
+
+                            okiedokie = false;
+                            while (okiedokie == false)
+                            {
+                                 if (usureusure == "y")
+                                     {
+                                         okiedokie = true;
+                                         state = State.EXIT;
+                                     }
+                                 else if (usureusure == "n")
+                                     {
+                                         okiedokie = true;
+                                         state = State.CREATE_ACCOUNT;
+                                     }
+                                 else
+                                    {
+                                         Scanner input = new Scanner(System.in);
+                                         System.out.println("Just a simple yes or no would suffice...");
+                                         usureusure  = input.nextLine();
+                                    }
+                            }
+
+                        }
+                else if (state1 == "b")
+                    {
+                        state = State.TITLE_SCREEN;
+                    }
+                else
+                    {
+                        //do the stuff pls @mohniSH
+                        state = State.TITLE_SCREEN;
+                    }
+                break;
+            case MANAGE_ROOMS:
+                // ??????????????? @moHNIsh
+
+                Scanner scannr = new Scanner(System.in);
+                String state1 = scannr.nextLine();
+
+                 if (state1 == "x")
+                        {
+                             Scanner input = new Scanner(System.in);
+                             System.out.println("Are you sure you would like to quit?");
+                             usureusure  = input.nextLine();
+
+                            okiedokie = false;
+                            while (okiedokie == false)
+                            {
+                                 if (usureusure == "y")
+                                     {
+                                         okiedokie = true;
+                                         state = State.EXIT;
+                                     }
+                                 else if (usureusure == "n")
+                                     {
+                                         okiedokie = true;
+                                         state = State.MANAGE_ROOMS;
+                                     }
+                                 else
+                                    {
+                                         Scanner input = new Scanner(System.in);
+                                         System.out.println("Just a simple yes or no would suffice...");
+                                         usureusure  = input.nextLine();
+                                    }
+                            }
+
+                        }
+                else if (state == "b")
+                    {
+                        state = State.TITLE_SCREEN;
+                    }
                 break;
             case ROOM_SELECT:
-                
-                
-                //if 
+
+                Scanner scannr = new Scanner(System.in);
+                String state1 = scannr.nextLine();
+
+                if (state1 == "x")
+                        {
+                             Scanner input = new Scanner(System.in);
+                             System.out.println("Are you sure you would like to quit?");
+                             usureusure  = input.nextLine();
+
+                            okiedokie = false;
+                            while (okiedokie == false)
+                            {
+                                 if (usureusure == "y")
+                                     {
+                                         okiedokie = true;
+                                         state = State.EXIT;
+                                     }
+                                 else if (usureusure == "n")
+                                     {
+                                         okiedokie = true;
+                                         state = State.ROOM_SELECT;
+                                     }
+                                 else
+                                    {
+                                         Scanner input = new Scanner(System.in);
+                                         System.out.println("Just a simple yes or no would suffice...");
+                                         usureusure  = input.nextLine();
+                                    }
+                            }
+
+                        }
+                else if (state == "b")
+                    {
+                        state = State.TITLE_SCREEN;
+                    }
                 break;
-            
-            case PLAY_GAME: 
+            case PLAY_GAME:
+                //select room
+
+                Scanner scannr = new Scanner(System.in);
+                String state1 = scannr.nextLine();
+
+                 if (state1 == "x")
+                        {
+                             Scanner input = new Scanner(System.in);
+                             System.out.println("Are you sure you would like to quit?");
+                             usureusure  = input.nextLine();
+
+                            okiedokie = false;
+                            while (okiedokie == false)
+                            {
+                                 if (usureusure == "y")
+                                     {
+                                         okiedokie = true;
+                                         state = State.EXIT;
+                                     }
+                                 else if (usureusure == "n")
+                                     {
+                                         okiedokie = true;
+                                         state = State.PLAY_GAME;
+                                     }
+                                 else
+                                    {
+                                         Scanner input = new Scanner(System.in);
+                                         System.out.println("Just a simple yes or no would suffice...");
+                                         usureusure  = input.nextLine();
+                                    }
+                            }
+
+                        }
+                else if (state1 == "b")
+                    {
+                        state = State.TITLE_SCREEN;
+                    }
+
                Blackjack game = new Blackjack();    
                game.game();
             case EXIT:
@@ -103,11 +338,103 @@ public class BlackJackTester_Gupta
                 
                 //Check with MongoDB to ensure that both username entered and password entered are correct
                 //if (userNameEntered == )
-                  
-                
-                
+
+                Scanner scannr = new Scanner(System.in);
+                String state1 = scannr.nextLine();
+
+                 if (state1 == "x")
+                        {
+                             Scanner input = new Scanner(System.in);
+                             System.out.println("Are you sure you would like to quit?");
+                             usureusure  = input.nextLine();
+
+                            okiedokie = false;
+                            while (okiedokie == false)
+                            {
+                                 if (usureusure == "y")
+                                     {
+                                         okiedokie = true;
+                                         state = State.EXIT;
+                                     }
+                                 else if (usureusure == "n")
+                                     {
+                                         okiedokie = true;
+                                         state = State.LOGIN;
+                                     }
+                                 else
+                                    {
+                                         Scanner input = new Scanner(System.in);
+                                         System.out.println("Just a simple yes or no would suffice...");
+                                         usureusure  = input.nextLine();
+                                    }
+                            }
+
+                        }
+                else if (state1 == "b")
+                    {
+                        state = State.TITLE_SCREEN;
+                    }
+
                 break;
             case LOGOUT:
+                Scanner input = new Scanner(System.in);
+                System.out.println("Are you sure you would like to logout? (yes or no)");
+                usureusure  = input.nextLine();
+
+                Scanner scannr = new Scanner(System.in);
+                String state1 = scannr.nextLine();
+
+                 if (state1 == "x")
+                        {
+                             Scanner input = new Scanner(System.in);
+                             System.out.println("Are you sure you would like to quit?");
+                             usureusure  = input.nextLine();
+
+                            okiedokie = false;
+                            while (okiedokie == false)
+                            {
+                                 if (usureusure == "y")
+                                     {
+                                         okiedokie = true;
+                                         state = State.EXIT;
+                                     }
+                                 else if (usureusure == "n")
+                                     {
+                                         okiedokie = true;
+                                         state = State.LOGOUT;
+                                     }
+                                 else
+                                    {
+                                         Scanner input = new Scanner(System.in);
+                                         System.out.println("Just a simple yes or no would suffice...");
+                                         usureusure  = input.nextLine();
+                                    }
+                            }
+
+                        }
+
+                okiedokie = false;
+                while (okiedokie == false)
+                    {
+                        if (usureusure == "y")
+                            {
+                                okiedokie = true;
+                                loggedIn = false;
+                                state = State.TITLE_SCREEN;
+                            }
+                        else if (usureusure == "n")
+                            {
+                                okiedokie = true;
+                                loggedIn = true;
+                                state = State.TITLE_SCREEN;
+                            }
+                        else
+                            {
+                                Scanner input = new Scanner(System.in);
+                                System.out.println("Just a simple yes or no would suffice...");
+                                usureusure  = input.nextLine();
+                            }
+                    }
                 break;
         }
       }
@@ -115,6 +442,11 @@ public class BlackJackTester_Gupta
             
    }
 }   
+   }
+   */
+   }
+}   
+//# END OF MAIN
 
 
 /**
@@ -127,16 +459,19 @@ class Blackjack
    private ArrayList<Player> players;
    private Dealer dealer;
    private int playerCount;
-   
+   private int roomMoney;
+
    void GetRoom(Player player)
    {
        if (player.getMoney() >= 20000)
                {
                    //Fill with MongoDB Info: Create a new building in "Buildings" collection with username stored
-                   player.buyGameRoom(20000);
-                   
+                   player.buyGameRoom(20000);   
                }
    }
+   
+
+   //# INSTANTIATE DECK, PLAYERS
 /**
 Creates the deck and shuffles it, adds player list, asks for # of players,
 and creates a blackjack game.
@@ -146,11 +481,12 @@ and creates a blackjack game.
       deck = new Deck();
       deck.shuffle();
       
+      
       System.out.println("Welcome, everybody, to a wonderful game of 21, or Blackjack!");
       System.out.println("____________________________________________________________");
       System.out.println("How many players? Please enter a positive integer.");
       
-      while (playerCount <= 0)
+      while (playerCount <= 0 || playerCount > 4)
       {
          Scanner scanner = new Scanner(System.in);
       
@@ -160,6 +496,10 @@ and creates a blackjack game.
             if (playerCount <= 0)
             {
                System.out.println("Please enter a positive number");      
+            }
+            else if (playerCount > 4)
+            {
+                System.out.println("Please enter a max of 4 players");
             }
             scanner.nextLine();
          }
@@ -181,21 +521,24 @@ and creates a blackjack game.
       }
       
       dealer = new Dealer();
+      
+      roomMoney = 1000000;
    }
+
+//# END INITIATE DECK, PLAYERS
 
 /**
 Runs the game and all of its logic.
 */   
    public void game()
    {      
-      boolean playAgain = true; 
-      
-      
-          
+      boolean playAgain = true;
       
       while (playAgain == true)
       {
-         
+      
+        boolean blackjackState = false;
+      
          
          /**
          Decides if deck needs to be remade
@@ -229,14 +572,18 @@ Runs the game and all of its logic.
          for (int i = 0; i < 2; i++)
          {
             dealer.addCard(deck.deal());
-            
-            for (Player player : players)
-            {
-               player.addCard(deck.deal());
-            }
+         }
+         
+         for (Player player : players)
+         {
+             Hand hand = new Hand();
+             {
+                 for (int i = 0; i < 2; i++)
+                 {
+                    player.addCard(deck.deal(), hand, 0);
+                 }
+             }
          }  
-         
-         
          /**
          Each players places their bets.
          */
@@ -244,6 +591,7 @@ Runs the game and all of its logic.
          /**
 Puts money amount that player enters into pot and removes
 from player
+
    
    public void putMoneyInPot(int betAmount)
    {
@@ -251,7 +599,11 @@ from player
       money -= betAmount;
    }
 */
-
+         System.out.println("Dealer");
+         dealer.displayDealerHand();
+         
+         System.out.println("__________________________________________________________");
+         
          System.out.println("Onto betting");
 
          for (Player player : players)
@@ -292,138 +644,276 @@ from player
                }
             }
          }
-                        
+        
+         /**
+         System.out.print("Dealer's Hand: ");
+         dealer.displayDealerHand();
+         System.out.println();
          
+         for (Player player : players)
+         {
+             player.displayHand();
+             System.out.println();
+         }
+         */
+        
+         dealer.getHandValue();
+         
+         //System.out.println("dealer.isBlackjack == " + dealer.isBlackjack());
+                 
+         if (dealer.isBlackjack() == true)
+         {
+             dealer.endGameHand();
+             blackjackState = true;
+             
+             for (Player player : players)
+             {
+                 int count = 0;
+                 for (Hand hand : player.getHandArray())
+                 {
+                     System.out.println(player.getName() + "'s Hand #" + (count + 1) + " of " + player.getHandArray().size());
+                     player.getHandValue(hand);
+                     
+                 //System.out.println("player.isBlackjack == " + player.isBlackjack());
+                    if (player.isBlackjack(hand))
+                    {
+                        player.displayHand(hand);
+                        System.out.println("It's a tie for " + player.getName() + " and Dealer!");
+                        player.tieMoney();
+                        player.resetPot();
+                    }
+                    else
+                    {
+                        player.displayHand(hand);
+                        System.out.println(player.getName() + " lost, very sad day.");
+                        player.resetPot();
+                    }
+                    
+                    count++;
+                 
+                 }
+               
+             }    
+         }
+         else
+         {
+             for (Player player : players)
+             {
+                 //int count = 0;
+                 
+                 //System.out.println("player.isBlackjack == " + player.isBlackjack());
+                 
+                 for (Hand hand : player.getHandArray())
+                 {
+                     if (player.isBlackjack(hand) == true)
+                    {
+                        //if (count == 0)
+                        //{
+                        //    dealer.endGameHand();
+                        //}
+                     
+                        //blackjackState = true;
+                        player.displayHand(hand);
+                        //System.out.println(player.getName() + " won! Get that fat stack of cash!");
+                        player.blackjackWin();
+                        player.resetPot();
+                        System.out.println(player.getName() + " has Blackjack so won't hit this round");
+                 }
+             }    
+         }
+         
+             
+
          
          /**
          Each player plays his/her hand.
          */
-         for (Player player : players)
-         {
-            System.out.print("Dealer's Hand: ");
-            dealer.displayDealerHand();
-         
-            System.out.println();
-            player.displayHand();
-         
-            while (player.getHandValue() <= 21 && player.getUserChoice() == true)
+         if (blackjackState == false)
+         { 
+            for (Player player : players)
             {
-               player.addCard(deck.deal());
-               player.displayHand();
+                for (Hand hand : player.getHandArray())
+                {
+                    player.displayHand(hand);
+                    
+                    int count = 1;
+                    
+                    if (hand.get(0).getValue() == hand.get(1).getValue() && count == 1 && player.isBlackjack(hand) == false)
+                    {
+                        Scanner scanner = new Scanner(System.in);
+                        
+                        if (count == 1)
+                        {
+                            System.out.println("Would you like to split your hand? Type Yes or No");
+                            String response = scanner.nextLine();
+      
+                            while (!response.substring(0,1).equals("Y") && !response.substring(0,1).equals("y")
+                            && !response.substring(0,1).equals("N") && !response.substring(0,1).equals("n"))
+                            {
+                                System.out.println("Please enter Yes or No");
+                                response = scanner.nextLine();
+                            }
+      
+                            if (response.substring(0,1).equals("Y") || response.substring(0,1).equals("y"))
+                            {
+                                player.split(deck, hand);
+                            }
+                        
+                        count++;
+                        }
+                    }
+                    
+                    if (count > 1 && hand.get(0).getValue() == hand.get(1).getValue() && player.isBlackjack(hand) == false)
+                    {
+                        System.out.println("You can only split once per round");
+                    }
+                }
+                
+                boolean canDoubleDown;
+                boolean doublingDown = false;
+                
+                int handIndex = 0;
+                
+                for (Hand hand : player.getHandArray())
+                {    
+                    int counter = 1;
+                    
+                    if (player.isBlackjack(hand) == false)
+                    {
+                        if (player.getMoney() >= player.getPot())
+                        {
+                            canDoubleDown = true;
+                        }
+                        else
+                        {
+                            canDoubleDown = false;
+                        }
+                
+                        //System.out.println("Is " + player.getName() + "'s hand a blackjack? " + player.isBlackjack());
+                
+                        System.out.println();
+                        System.out.print("Dealer's Hand: ");
+                        dealer.displayDealerHand();
+                
+                        System.out.println();
+                        player.displayHand(hand);
+                
+                        if (canDoubleDown && counter == 1)
+                        {                           
+                            doublingDown = player.DoublingDown();
+                            counter++;
+                        }
+                        else
+                        {
+                            System.out.println(player.getName() + " cannot doubledown for (s)he is but a peasant");
+                            counter++;
+                        }
+                
+                
+                        if (doublingDown == true)
+                        {
+                            
+                            player.addCard(deck.deal(), hand, handIndex);
+                            player.displayHand(hand);
+                        }
+                
+                        else
+                        {
+                            while (player.getHandValue(hand) <= 21 && player.getUserChoice() == true)
+                            {
+                                player.addCard(deck.deal(), hand, handIndex);
+                                player.displayHand(hand);
+                            }
+            
+                            if (player.getHandValue(hand) > 21)
+                            {
+                                System.out.println("Ooooo, you busted your hand!");
+                            }
+            
+                            System.out.println(); 
+                        }
+                    }
+                }
             }
             
-            if (player.getHandValue() > 21)
-            {
-               System.out.println("Ooooo, you busted your hand!");
-            }
-            
-            System.out.println();
-         }  
-         
-         
-         /**
-         Dealer plays hand
-         */
-         while (dealer.shouldHit() == true)
-         {
-            dealer.addCard(deck.deal());
-         }
+                /**
+                Dealer plays hand
+                */
+                while (dealer.shouldHit() == true)
+                {
+                    dealer.addCard(deck.deal());
+                }
       
          
-         /**
-         Decides who won
-         */
          
-         int dealerPoints = dealer.endGameHand();
+                /**
+                Decides who won
+                */
+         
+                int dealerPoints = dealer.endGameHand();
 
-         for (Player player : players)
-         {
-            //Case that player has more points, within accepted range, than dealer
-            if (dealerPoints < player.getHandValue() && player.getHandValue() <= 21)
-            {
-               player.isWinner();
-               System.out.println(player.getName() + " won!");
-               
-               if (player.isBlackjack() == true)
-               {
-                  player.blackjackWin();
-               }
-               else
-               {
-                  player.regularWin();
-               }
-               
-               player.resetPot();
-               
-            }
+                for (Player player : players)
+                {
+                    for (Hand hand : player.getHandArray())
+                    {
+                        //Case that player has more points, within accepted range, than dealer
+                        if (dealerPoints < player.getHandValue(hand) && player.getHandValue(hand) <= 21)
+                        {
+                            player.isWinner();
+                            System.out.println(player.getName() + " won!");
+                            player.regularWin();
+                            player.resetPot();
+                        }
+              
+                        //Case that both players have same point values and is not blackjack, it is a tie
+                        else if (dealerPoints == player.getHandValue(hand) && player.getHandValue(hand) <= 21)
+                        {
+                            System.out.println("It's a tie for " + player.getName() + " and Dealer!");
+                            player.tieMoney();
+                            player.resetPot();
+                        }   
             
-            //Case that both players have same point values
-            else if (dealerPoints == player.getHandValue() && player.getHandValue() <= 21)
-            {
-               //If dealer has blackjack but player doesn't, dealer gets priority
-               if (dealer.isBlackjack() == true && player.isBlackjack() == false)
-               {
-                  System.out.println(player.getName() + " lost.");
-                  dealer.isWinner();
-                  player.resetPot();
-               }
-               //If player has priority and dealer doesn't, player has priority
-               else if (dealer.isBlackjack() == false && player.isBlackjack() == true)
-               {
-                  System.out.println(player.getName() + " won!");
-                  player.isWinner();
-                  player.blackjackWin();
-                  player.resetPot();
-               }
-               //If both have blackjack or neither has blackjack, it's a tie
-               else
-               { 
-                  System.out.println("It's a tie for " + player.getName() + " and Dealer!");
-                  player.tieMoney();
-                  player.resetPot();
-               }
-            }
-            //If dealer has more points, within accepted range, than player
-            else if (dealerPoints > player.getHandValue() && dealerPoints <= 21)
-            {
-               dealer.isWinner();
-               System.out.println(player.getName() + " lost.");
-               player.resetPot();
-            }
+                        //If dealer has more points, within accepted range, than player
+                        else if (dealerPoints > player.getHandValue(hand) && dealerPoints <= 21)
+                        {
+                            dealer.isWinner();
+                            System.out.println(player.getName() + " lost.");
+                            player.resetPot();
+                        }
             
-            //If dealer busts and player does not
-            else if (player.getHandValue() <= 21 && dealerPoints > 21)
-            {
-               player.isWinner();
+                        //If dealer busts and player does not
+                        else if (player.getHandValue(hand) <= 21 && dealerPoints > 21)
+                        {
+                            player.isWinner();
                
-               if (player.isBlackjack() == true)
-               {
-                  player.blackjackWin();
-               }
-               else
-               {
-                  player.regularWin();
-               }
-               
-               player.resetPot();            
-               
-               System.out.println(player.getName() + " won!");
+                        /**
+                        if (player.isBlackjack() == true)
+                        {
+                        player.blackjackWin();
+                        }
+                        else
+                        */
+                            player.regularWin();
+                            player.resetPot();            
+                            System.out.println(player.getName() + " won!");
+                        }   
+                        //If player busts and dealer does not
+                        else if (dealerPoints <= 21 && player.getHandValue(hand) > 21)
+                        {
+                            dealer.isWinner();
+                            System.out.println(player.getName() + " lost!");
+                            player.resetPot();
+                        }
+                        //If everyone busts, nobody wins but player loses money
+                        else if (dealerPoints > 21 && player.getHandValue(hand) > 21)
+                        {
+                            System.out.println("Both " + player.getName() + " and Dealer lost.");
+                            player.resetPot();                
+                        }
+                    }
+                }
             }
-            //If player busts and dealer does not
-            else if (dealerPoints <= 21 && player.getHandValue() > 21)
-            {
-               dealer.isWinner();
-               System.out.println(player.getName() + " lost!");
-               player.resetPot();
-            }
-            //If everyone busts, nobody wins but player loses money
-            else if (dealerPoints > 21 && player.getHandValue() > 21)
-            {
-               System.out.println("Both " + player.getName() + " and Dealer lost.");
-               player.resetPot();                
-            }
-         }
-         
+         } 
          
          
          /**
@@ -432,7 +922,9 @@ from player
          for (Player player: players)
          {
             player.clearHand();
+            player.resetSplit();
          }
+         
          
          dealer.clearHand();
          
@@ -461,25 +953,34 @@ from player
          Asks if person wants to play again
          */
                   
-         System.out.println("Would you like to play again? Type Yes or No");
-         Scanner scanner = new Scanner(System.in);
-         String response = scanner.nextLine();
-      
-         while (!response.substring(0,1).equals("Y") && !response.substring(0,1).equals("y")
-         && !response.substring(0,1).equals("N") && !response.substring(0,1).equals("n"))
+         if (players.size() == 0)
          {
-            System.out.println("Please enter Yes or No");
-            response = scanner.nextLine();
+             System.out.println("This room has gotten lonely because everyone became too poor to play.");
+             System.out.println("Bye-bye losers.");
+             playAgain = false;
          }
-      
-         if (response.substring(0,1).equals("N") || response.substring(0,1).equals("n"))
+         else
          {
-            playAgain = false;
-         }
-      }
+            System.out.println("Would you like to play again? Type Yes or No");
+            Scanner scanner = new Scanner(System.in);
+            String response = scanner.nextLine();
+      
+             
+            while (!response.substring(0,1).equals("Y") && !response.substring(0,1).equals("y")
+            && !response.substring(0,1).equals("N") && !response.substring(0,1).equals("n"))
+            {
+                System.out.println("Please enter Yes or No");
+                response = scanner.nextLine();
+            }
+      
+            if (response.substring(0,1).equals("N") || response.substring(0,1).equals("n"))
+            {
+                playAgain = false;
+            }
+        }
     }
-}     
-   
+}
+}
         
       
       
@@ -501,6 +1002,8 @@ run by the game's AI.  It will decide for itself whether to take another card
 or to stop.  It will show all of its cards except one while the game is in play,
 then it will show its entire hand at the end to compare who won.
 */
+
+
 class Dealer
 {
    private Hand dealerHand;
@@ -573,6 +1076,11 @@ as well as its cumulative point value to decide who won.
       return value;
    }
    
+   public int getHandValue()
+   {
+       return dealerHand.getValue();
+   }
+   
 /**
 Empties the dealer's hand
 */
@@ -612,6 +1120,7 @@ Returns whether hand is a blackjack
 
 
 
+
 /**
 The player class is essentially the user interface. It maintains the player's hand
 and interacts with the player to display the hand to them and then ask if they want
@@ -619,20 +1128,23 @@ to hit. It also returns the value back to be used later.
 */
 class Player
 {
-   private Hand hand;
+   private ArrayList<Hand> hand;
+   private Hand initialHand;
    private String name;
    private int win;
    private int money;
    private int pot;
    private boolean playing;
-   
+   private boolean isSplit;
    
 /**
 The constructor creates the hand based off a deck entered into it. (at least for testing)
 */
    public Player(String playerName)
    {
-      hand = new Hand();
+      hand = new ArrayList<Hand>();
+      initialHand = new Hand();
+      hand.add(initialHand);
       name = playerName;
       win = 0;
       money = 1000;
@@ -641,18 +1153,18 @@ The constructor creates the hand based off a deck entered into it. (at least for
 
 /**
 This method allows for the player to add a card to his deck.
-*/
-   
-   public void addCard(Card card)
+*/   
+   public void addCard(Card card, Hand hand, int index)
    {
       hand.addCard(card);
+      this.hand.set(index, hand);
    }
    
       
 /**
 displayHand shows the user his/her hand and its value.
 */
-   public void displayHand()
+   public void displayHand(Hand hand)
    {
       System.out.println(name);
       System.out.println("___________________________________________________");
@@ -686,10 +1198,36 @@ getUserChoice asks the user if he/she wants to hit.
       return false;
    }
    
+   public boolean DoublingDown()
+   {
+       //System.out.println("Is " + player.getName() + "'s hand a blackjack? " + player.isBlackjack());
+                
+               
+        Scanner scannering = new Scanner(System.in);
+        System.out.println("Would you like to double down? Type Yes or No");
+        String response = scannering.nextLine();
+      
+        while (!response.substring(0,1).equals("Y") && !response.substring(0,1).equals("y")
+        && !response.substring(0,1).equals("N") && !response.substring(0,1).equals("n"))
+        {
+            System.out.println("Please enter Yes or No");
+            response = scannering.nextLine();
+        }
+      
+        if (response.substring(0,1).equals("Y") || response.substring(0,1).equals("y"))
+        {
+            money -= pot;
+            pot *= 2;
+            return true;
+        }
+      
+        return false;
+   }
+   
 /**
 getHandValue returns the point value of the hand.
 */   
-   public int getHandValue()
+   public int getHandValue(Hand hand)
    {
       return hand.getValue();
    }
@@ -710,13 +1248,20 @@ Returns the amount of money a player has
    {
       return money;
    }
+   
+   public int getPot()
+   {
+       return pot;
+   }
 
 /**
 Empties the player's hand
 */   
    public void clearHand()
    {
-      hand.clear();
+      Hand handtemp = new Hand();
+      this.hand.clear(); 
+      hand.add(handtemp);
    }
 
 /**
@@ -738,7 +1283,7 @@ Adds a win to the player
 /**
 Returns whether hand is a blackjack
 */      
-   public boolean isBlackjack()
+   public boolean isBlackjack(Hand hand)
    {
       return hand.isBlackjack();
    }   
@@ -778,6 +1323,11 @@ Resets a player's bet to 0 to use at the end of each round
       pot = 0;
    }
    
+   public void resetSplit()
+   {
+       isSplit = false;
+   }
+   
 /**
 Adds 1.5x money for a player who has a blackjack when dealer does not. Logic applied in the game function
 */   
@@ -813,6 +1363,40 @@ Returns money to player from pot when it is a tie
    {
        this.money -= money;       
    }
+   
+   public ArrayList<Hand> getHandArray()
+   {
+       return this.hand;
+   }
+   
+   public void split(Deck deck, Hand hand)
+   {
+       Hand newHand = new Hand();
+       newHand.addCard(hand.get(1));
+       hand.remove(1);
+       
+       hand.addCard(deck.deal());
+       newHand.addCard(deck.deal());
+       
+       ArrayList<Hand> HandList = new ArrayList<Hand>();
+       
+       HandList.add(hand);
+       HandList.add(newHand);
+       
+       this.hand = HandList;
+       
+       isSplit = true;
+   }
+   
+   public void setHand(ArrayList<Hand> handsy)
+   {
+       this.hand = handsy;
+   }
+   
+   public boolean isSplit()
+   {
+       return isSplit;
+   }
 }
 
 
@@ -825,7 +1409,7 @@ class Card
  	String suit = "";
   	String rank = "";
   	int pointValue = 0;
-   boolean isFaceUp;
+        boolean isFaceUp;
 
 /**
 Constructs the card with its suit, rank, and pointValue.
@@ -835,7 +1419,7 @@ Constructs the card with its suit, rank, and pointValue.
   		suit =  suitOfCard;
   		rank = cardRank;
   		pointValue = valueOfCard;
-      isFaceUp = false;
+                isFaceUp = false;
   	}
 
 /**
@@ -1130,6 +1714,15 @@ Returns a card from the hand.
    }
    
 /**
+Removes a card from the hand
+*/
+   public Card remove(int i)
+   {
+       return cards.remove(i);
+   }
+   
+   
+/**
 Returns hand in String form.
 */   
    public String toString()
@@ -1173,12 +1766,3 @@ to be filled again
       return false;
    }
 }
-    /**
-     * @param args the command line arguments
-     */
-
-        // TODO code application logic here
-    
-    
-
-

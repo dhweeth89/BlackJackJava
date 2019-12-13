@@ -95,14 +95,14 @@ class Blackjack
    private ArrayList<Player> players;
    private Dealer dealer;
    private int playerCount;
+   private int roomMoney;
 
    void GetRoom(Player player)
    {
        if (player.getMoney() >= 20000)
                {
                    //Fill with MongoDB Info: Create a new building in "Buildings" collection with username stored
-                   player.buyGameRoom(20000);
-                   
+                   player.buyGameRoom(20000);   
                }
    }
    
@@ -152,6 +152,8 @@ and creates a blackjack game.
       }
       
       dealer = new Dealer();
+      
+      roomMoney = 10000;
    }
 
 /**
@@ -199,11 +201,17 @@ Runs the game and all of its logic.
          for (int i = 0; i < 2; i++)
          {
             dealer.addCard(deck.deal());
-            
-            for (Player player : players)
-            {
-               player.addCard(deck.deal());
-            }
+         }
+         
+         for (Player player : players)
+         {
+             Hand hand = new Hand();
+             {
+                 for (int i = 0; i < 2; i++)
+                 {
+                    player.addCard(deck.deal(), hand, 0);
+                 }
+             }
          }  
          /**
          Each players places their bets.
@@ -220,7 +228,11 @@ from player
       money -= betAmount;
    }
 */
-
+         System.out.println("Dealer");
+         dealer.displayDealerHand();
+         
+         System.out.println("__________________________________________________________");
+         
          System.out.println("Onto betting");
 
          for (Player player : players)
@@ -285,112 +297,172 @@ from player
              
              for (Player player : players)
              {
-                 player.getHandValue();
-                 
+                 int count = 0;
+                 for (Hand hand : player.getHandArray())
+                 {
+                     System.out.println(player.getName() + "'s Hand #" + (count + 1) + " of " + player.getHandArray().size());
+                     player.getHandValue(hand);
+                     
                  //System.out.println("player.isBlackjack == " + player.isBlackjack());
-                 if (player.isBlackjack())
-                 {
-                     player.displayHand();
-                     System.out.println("It's a tie for " + player.getName() + " and Dealer!");
-                     player.tieMoney();
-                     player.resetPot();
+                    if (player.isBlackjack(hand))
+                    {
+                        player.displayHand(hand);
+                        System.out.println("It's a tie for " + player.getName() + " and Dealer!");
+                        player.tieMoney();
+                        player.resetPot();
+                    }
+                    else
+                    {
+                        player.displayHand(hand);
+                        System.out.println(player.getName() + " lost, very sad day.");
+                        player.resetPot();
+                    }
+                    
+                    count++;
+                 
                  }
-                 else
-                 {
-                     player.displayHand();
-                     System.out.println(player.getName() + " lost, very sad day.");
-                     player.resetPot();
-                 }
+               
              }    
          }
          else
          {
              for (Player player : players)
              {
-                 int count = 0;
+                 //int count = 0;
                  
                  //System.out.println("player.isBlackjack == " + player.isBlackjack());
                  
-                 
-                 if (player.isBlackjack() == true)
+                 for (Hand hand : player.getHandArray())
                  {
-                     if (count == 0)
-                     {
-                        dealer.endGameHand();
-                     }
+                     if (player.isBlackjack(hand) == true)
+                    {
+                        //if (count == 0)
+                        //{
+                        //    dealer.endGameHand();
+                        //}
                      
-                     blackjackState = true;
-                     player.displayHand();
-                     //System.out.println(player.getName() + " won! Get that fat stack of cash!");
-                     player.blackjackWin();
-                     player.resetPot();
-                     count++;
+                        //blackjackState = true;
+                        player.displayHand(hand);
+                        //System.out.println(player.getName() + " won! Get that fat stack of cash!");
+                        player.blackjackWin();
+                        player.resetPot();
+                        System.out.println(player.getName() + " has Blackjack so won't hit this round");
                  }
              }    
          }
          
-
+             
 
          
          /**
          Each player plays his/her hand.
          */
-         if (!blackjackState)
-         {
-         
+         if (blackjackState == false)
+         { 
             for (Player player : players)
             {
+                for (Hand hand : player.getHandArray())
+                {
+                    player.displayHand(hand);
+                    
+                    int count = 1;
+                    
+                    if (hand.get(0).getValue() == hand.get(1).getValue() && count == 1 && player.isBlackjack(hand) == false)
+                    {
+                        Scanner scanner = new Scanner(System.in);
+                        
+                        if (count == 1)
+                        {
+                            System.out.println("Would you like to split your hand? Type Yes or No");
+                            String response = scanner.nextLine();
+      
+                            while (!response.substring(0,1).equals("Y") && !response.substring(0,1).equals("y")
+                            && !response.substring(0,1).equals("N") && !response.substring(0,1).equals("n"))
+                            {
+                                System.out.println("Please enter Yes or No");
+                                response = scanner.nextLine();
+                            }
+      
+                            if (response.substring(0,1).equals("Y") || response.substring(0,1).equals("y"))
+                            {
+                                player.split(deck, hand);
+                            }
+                        
+                        count++;
+                        }
+                    }
+                    
+                    if (count > 1 && hand.get(0).getValue() == hand.get(1).getValue() && player.isBlackjack(hand) == false)
+                    {
+                        System.out.println("You can only split once per round");
+                    }
+                }
+                
                 boolean canDoubleDown;
                 boolean doublingDown = false;
                 
-                if (player.getMoney() > player.getPot())
-                {
-                    canDoubleDown = true;
-                }
-                else
-                {
-                    canDoubleDown = false;
-                }
-                //System.out.println("Is " + player.getName() + "'s hand a blackjack? " + player.isBlackjack());
+                int handIndex = 0;
                 
-                System.out.println();
-                System.out.print("Dealer's Hand: ");
-                dealer.displayDealerHand();
-                
-                System.out.println();
-                player.displayHand();
-                
-                if (canDoubleDown)
-                {
-                    doublingDown = player.DoublingDown();
-                }
-                else
-                {
-                    System.out.println(player.getName() + " cannot doubledown for (s)he is but a peasant");
-                }
-                
-                
-                if (doublingDown == true)
-                {
-                    player.addCard(deck.deal());
-                    player.displayHand();
-                }
-                
-                else
-                {
-                    while (player.getHandValue() <= 21 && player.getUserChoice() == true)
+                for (Hand hand : player.getHandArray())
+                {    
+                    int counter = 1;
+                    
+                    if (player.isBlackjack(hand) == false)
                     {
-                        player.addCard(deck.deal());
-                        player.displayHand();
-                    }
+                        if (player.getMoney() >= player.getPot())
+                        {
+                            canDoubleDown = true;
+                        }
+                        else
+                        {
+                            canDoubleDown = false;
+                        }
+                
+                        //System.out.println("Is " + player.getName() + "'s hand a blackjack? " + player.isBlackjack());
+                
+                        System.out.println();
+                        System.out.print("Dealer's Hand: ");
+                        dealer.displayDealerHand();
+                
+                        System.out.println();
+                        player.displayHand(hand);
+                
+                        if (canDoubleDown && counter == 1)
+                        {                           
+                            doublingDown = player.DoublingDown();
+                            counter++;
+                        }
+                        else
+                        {
+                            System.out.println(player.getName() + " cannot doubledown for (s)he is but a peasant");
+                            counter++;
+                        }
+                
+                
+                        if (doublingDown == true)
+                        {
+                            
+                            player.addCard(deck.deal(), hand, handIndex);
+                            player.displayHand(hand);
+                        }
+                
+                        else
+                        {
+                            while (player.getHandValue(hand) <= 21 && player.getUserChoice() == true)
+                            {
+                                player.addCard(deck.deal(), hand, handIndex);
+                                player.displayHand(hand);
+                            }
             
-                    if (player.getHandValue() > 21)
-                    {
-                        System.out.println("Ooooo, you busted your hand!");
-                    }
+                            if (player.getHandValue(hand) > 21)
+                            {
+                                System.out.println("Ooooo, you busted your hand!");
+                            }
             
-                    System.out.println(); 
-                }    
+                            System.out.println(); 
+                        }
+                    }
+                }
             }
             
                 /**
@@ -411,59 +483,63 @@ from player
 
                 for (Player player : players)
                 {
-                    //Case that player has more points, within accepted range, than dealer
-                    if (dealerPoints < player.getHandValue() && player.getHandValue() <= 21)
+                    for (Hand hand : player.getHandArray())
                     {
-                        player.isWinner();
-                        System.out.println(player.getName() + " won!");
-                        player.regularWin();
-                        player.resetPot();
-                    }
+                        //Case that player has more points, within accepted range, than dealer
+                        if (dealerPoints < player.getHandValue(hand) && player.getHandValue(hand) <= 21)
+                        {
+                            player.isWinner();
+                            System.out.println(player.getName() + " won!");
+                            player.regularWin();
+                            player.resetPot();
+                        }
               
-                //Case that both players have same point values and is not blackjack, it is a tie
-                else if (dealerPoints == player.getHandValue() && player.getHandValue() <= 21)
-                {
-                    System.out.println("It's a tie for " + player.getName() + " and Dealer!");
-                    player.tieMoney();
-                    player.resetPot();
-                }
+                        //Case that both players have same point values and is not blackjack, it is a tie
+                        else if (dealerPoints == player.getHandValue(hand) && player.getHandValue(hand) <= 21)
+                        {
+                            System.out.println("It's a tie for " + player.getName() + " and Dealer!");
+                            player.tieMoney();
+                            player.resetPot();
+                        }   
             
-                //If dealer has more points, within accepted range, than player
-                else if (dealerPoints > player.getHandValue() && dealerPoints <= 21)
-                {
-                    dealer.isWinner();
-                    System.out.println(player.getName() + " lost.");
-                    player.resetPot();
-                }
+                        //If dealer has more points, within accepted range, than player
+                        else if (dealerPoints > player.getHandValue(hand) && dealerPoints <= 21)
+                        {
+                            dealer.isWinner();
+                            System.out.println(player.getName() + " lost.");
+                            player.resetPot();
+                        }
             
-                //If dealer busts and player does not
-                else if (player.getHandValue() <= 21 && dealerPoints > 21)
-                {
-                    player.isWinner();
+                        //If dealer busts and player does not
+                        else if (player.getHandValue(hand) <= 21 && dealerPoints > 21)
+                        {
+                            player.isWinner();
                
-               /**
-               if (player.isBlackjack() == true)
-               {
-                  player.blackjackWin();
-               }
-               else
-               */
-                    player.regularWin();
-                    player.resetPot();            
-                    System.out.println(player.getName() + " won!");
-                }   
-                //If player busts and dealer does not
-                else if (dealerPoints <= 21 && player.getHandValue() > 21)
-                {
-                    dealer.isWinner();
-                    System.out.println(player.getName() + " lost!");
-                    player.resetPot();
-                }
-                //If everyone busts, nobody wins but player loses money
-                else if (dealerPoints > 21 && player.getHandValue() > 21)
-                {
-                    System.out.println("Both " + player.getName() + " and Dealer lost.");
-                    player.resetPot();                
+                        /**
+                        if (player.isBlackjack() == true)
+                        {
+                        player.blackjackWin();
+                        }
+                        else
+                        */
+                            player.regularWin();
+                            player.resetPot();            
+                            System.out.println(player.getName() + " won!");
+                        }   
+                        //If player busts and dealer does not
+                        else if (dealerPoints <= 21 && player.getHandValue(hand) > 21)
+                        {
+                            dealer.isWinner();
+                            System.out.println(player.getName() + " lost!");
+                            player.resetPot();
+                        }
+                        //If everyone busts, nobody wins but player loses money
+                        else if (dealerPoints > 21 && player.getHandValue(hand) > 21)
+                        {
+                            System.out.println("Both " + player.getName() + " and Dealer lost.");
+                            player.resetPot();                
+                        }
+                    }
                 }
             }
          } 
@@ -475,7 +551,9 @@ from player
          for (Player player: players)
          {
             player.clearHand();
+            player.resetSplit();
          }
+         
          
          dealer.clearHand();
          
@@ -553,6 +631,8 @@ run by the game's AI.  It will decide for itself whether to take another card
 or to stop.  It will show all of its cards except one while the game is in play,
 then it will show its entire hand at the end to compare who won.
 */
+
+
 class Dealer
 {
    private Hand dealerHand;
@@ -669,6 +749,7 @@ Returns whether hand is a blackjack
 
 
 
+
 /**
 The player class is essentially the user interface. It maintains the player's hand
 and interacts with the player to display the hand to them and then ask if they want
@@ -676,19 +757,23 @@ to hit. It also returns the value back to be used later.
 */
 class Player
 {
-   private Hand hand;
+   private ArrayList<Hand> hand;
+   private Hand initialHand;
    private String name;
    private int win;
    private int money;
    private int pot;
    private boolean playing;
+   private boolean isSplit;
    
 /**
 The constructor creates the hand based off a deck entered into it. (at least for testing)
 */
    public Player(String playerName)
    {
-      hand = new Hand();
+      hand = new ArrayList<Hand>();
+      initialHand = new Hand();
+      hand.add(initialHand);
       name = playerName;
       win = 0;
       money = 1000;
@@ -697,18 +782,18 @@ The constructor creates the hand based off a deck entered into it. (at least for
 
 /**
 This method allows for the player to add a card to his deck.
-*/
-   
-   public void addCard(Card card)
+*/   
+   public void addCard(Card card, Hand hand, int index)
    {
       hand.addCard(card);
+      this.hand.set(index, hand);
    }
    
       
 /**
 displayHand shows the user his/her hand and its value.
 */
-   public void displayHand()
+   public void displayHand(Hand hand)
    {
       System.out.println(name);
       System.out.println("___________________________________________________");
@@ -747,15 +832,15 @@ getUserChoice asks the user if he/she wants to hit.
        //System.out.println("Is " + player.getName() + "'s hand a blackjack? " + player.isBlackjack());
                 
                
-        Scanner scanner = new Scanner(System.in);
+        Scanner scannering = new Scanner(System.in);
         System.out.println("Would you like to double down? Type Yes or No");
-        String response = scanner.nextLine();
+        String response = scannering.nextLine();
       
         while (!response.substring(0,1).equals("Y") && !response.substring(0,1).equals("y")
         && !response.substring(0,1).equals("N") && !response.substring(0,1).equals("n"))
         {
             System.out.println("Please enter Yes or No");
-            response = scanner.nextLine();
+            response = scannering.nextLine();
         }
       
         if (response.substring(0,1).equals("Y") || response.substring(0,1).equals("y"))
@@ -771,7 +856,7 @@ getUserChoice asks the user if he/she wants to hit.
 /**
 getHandValue returns the point value of the hand.
 */   
-   public int getHandValue()
+   public int getHandValue(Hand hand)
    {
       return hand.getValue();
    }
@@ -803,7 +888,9 @@ Empties the player's hand
 */   
    public void clearHand()
    {
-      hand.clear();
+      Hand handtemp = new Hand();
+      this.hand.clear(); 
+      hand.add(handtemp);
    }
 
 /**
@@ -825,7 +912,7 @@ Adds a win to the player
 /**
 Returns whether hand is a blackjack
 */      
-   public boolean isBlackjack()
+   public boolean isBlackjack(Hand hand)
    {
       return hand.isBlackjack();
    }   
@@ -865,6 +952,11 @@ Resets a player's bet to 0 to use at the end of each round
       pot = 0;
    }
    
+   public void resetSplit()
+   {
+       isSplit = false;
+   }
+   
 /**
 Adds 1.5x money for a player who has a blackjack when dealer does not. Logic applied in the game function
 */   
@@ -899,6 +991,40 @@ Returns money to player from pot when it is a tie
    public void addMoneyToGameRoom(int money)
    {
        this.money -= money;       
+   }
+   
+   public ArrayList<Hand> getHandArray()
+   {
+       return this.hand;
+   }
+   
+   public void split(Deck deck, Hand hand)
+   {
+       Hand newHand = new Hand();
+       newHand.addCard(hand.get(1));
+       hand.remove(1);
+       
+       hand.addCard(deck.deal());
+       newHand.addCard(deck.deal());
+       
+       ArrayList<Hand> HandList = new ArrayList<Hand>();
+       
+       HandList.add(hand);
+       HandList.add(newHand);
+       
+       this.hand = HandList;
+       
+       isSplit = true;
+   }
+   
+   public void setHand(ArrayList<Hand> handsy)
+   {
+       this.hand = handsy;
+   }
+   
+   public boolean isSplit()
+   {
+       return isSplit;
    }
 }
 
@@ -1215,6 +1341,15 @@ Returns a card from the hand.
    {
       return cards.get(i);
    }
+   
+/**
+Removes a card from the hand
+*/
+   public Card remove(int i)
+   {
+       return cards.remove(i);
+   }
+   
    
 /**
 Returns hand in String form.
