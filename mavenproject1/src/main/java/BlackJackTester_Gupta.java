@@ -96,6 +96,8 @@ class Blackjack
    private Dealer dealer;
    private int playerCount;
    private int roomMoney;
+   private boolean isDefault;
+   private String buildingName;
 
    void GetRoom(Player player)
    {
@@ -113,15 +115,17 @@ and creates a blackjack game.
 */   
    public Blackjack()
    {
+      buildingName = "Bot Room";
       deck = new Deck();
       deck.shuffle();
-      
+      roomMoney = 200000;
+      isDefault = true;
       
       System.out.println("Welcome, everybody, to a wonderful game of 21, or Blackjack!");
       System.out.println("____________________________________________________________");
-      System.out.println("How many players? Please enter a positive integer.");
+      System.out.println("How many players? 1-4 players.");
       
-      while (playerCount <= 0)
+      while (playerCount <= 0 || playerCount > 4)
       {
          Scanner scanner = new Scanner(System.in);
       
@@ -131,6 +135,10 @@ and creates a blackjack game.
             if (playerCount <= 0)
             {
                System.out.println("Please enter a positive number");      
+            }
+            if (playerCount > 4)
+            {
+                System.out.println("Max 4 players. Enter a new number.");
             }
             scanner.nextLine();
          }
@@ -152,10 +160,61 @@ and creates a blackjack game.
       }
       
       dealer = new Dealer();
-      
-      roomMoney = 10000;
    }
 
+   
+   public Blackjack(String roomName, int moneys)
+   {
+      buildingName = roomName;
+      roomMoney = moneys;
+      deck = new Deck();
+      deck.shuffle();
+      isDefault = false;
+      
+      System.out.println("Welcome, everybody, to a wonderful game of 21, or Blackjack!");
+      System.out.println("____________________________________________________________");
+      System.out.println("How many players? 1-4 players.");
+      
+      while (playerCount <= 0 || playerCount > 4)
+      {
+         Scanner scanner = new Scanner(System.in);
+      
+         if (scanner.hasNextInt())
+         {
+            playerCount = scanner.nextInt();
+            if (playerCount <= 0)
+            {
+               System.out.println("Please enter a positive number");      
+            }
+            if (playerCount > 4)
+            {
+                System.out.println("Max 4 players. Enter a new number.");
+            }
+            scanner.nextLine();
+         }
+         else
+         {
+            System.out.println("Please enter a number");
+         }
+      }
+  
+      players = new ArrayList<Player>(); 
+      
+      for (int i = 0; i < playerCount; i++)
+      {
+         Scanner scanner = new Scanner(System.in);
+         System.out.println("What will your name be, player " + (i+1) + "?");
+         String playerName = scanner.nextLine();
+         Player player = new Player(playerName);
+         players.add(player);
+      }
+      
+      dealer = new Dealer();
+   }
+   
+   
+   
+   
 /**
 Runs the game and all of its logic.
 */   
@@ -163,11 +222,22 @@ Runs the game and all of its logic.
    {      
       boolean playAgain = true;
       
+      /**
+      int temp;
+      int temp2 = 30;
+      double temp3;
+      
+      temp3 = (1.5) * temp2;
+      temp = (int)temp3;
+      
+      System.out.println(temp3);
+      System.out.println(temp);
+      */
+      
       while (playAgain == true)
       {
       
         boolean blackjackState = false;
-      
          
          /**
          Decides if deck needs to be remade
@@ -183,17 +253,23 @@ Runs the game and all of its logic.
          /**
          Lists out who is playing and their scores
          */
-         System.out.println("Dealer wins: " + dealer.getWins());
+        System.out.println();
+        System.out.println(this.buildingName);
+        System.out.println("__________________________________________________________");
+         
+        
+        //System.out.println("Dealer wins: " + dealer.getWins());
+        System.out.println("Dealer money: $" + this.roomMoney);
          
          for (Player player : players)
          {
-            System.out.println(player.getName() + " wins: " + player.getWins());
-            System.out.println("$" + player.getMoney() + " remaining");
+            //System.out.println(player.getName() + " wins: " + player.getWins());
+            System.out.println(player.getName() + ": $" + player.getMoney() + " remaining");
             System.out.println();
          }
         
          System.out.println();
-         Scanner scanner1 = new Scanner(System.in);
+         //Scanner scanner1 = new Scanner(System.in);
          
          /**
          Adds 2 cards to each player's and dealer's hands
@@ -241,7 +317,7 @@ from player
             int bettingAmount = 0;
             int amountOfMoneyHad = player.getMoney();
             
-            System.out.println(player.getName() + ": " + amountOfMoneyHad);
+            System.out.println(player.getName() + ": $" + amountOfMoneyHad);
             
             
             
@@ -264,7 +340,7 @@ from player
                   }
                   else
                   {  
-                     player.putMoneyInPot(bettingAmount);
+                     player.putMoneyInPot(bettingAmount, 0);
                   }
                }
                else
@@ -308,14 +384,15 @@ from player
                     {
                         player.displayHand(hand);
                         System.out.println("It's a tie for " + player.getName() + " and Dealer!");
-                        player.tieMoney();
-                        player.resetPot();
+                        player.tieMoney(count);
+                        player.resetPot(count);
                     }
                     else
                     {
                         player.displayHand(hand);
                         System.out.println(player.getName() + " lost, very sad day.");
-                        player.resetPot();
+                        roomMoney += player.getPot(count);
+                        player.resetPot(count);
                     }
                     
                     count++;
@@ -331,10 +408,14 @@ from player
                  //int count = 0;
                  
                  //System.out.println("player.isBlackjack == " + player.isBlackjack());
-                 
+                 int counter = 0;
+                                  
                  for (Hand hand : player.getHandArray())
                  {
-                     if (player.isBlackjack(hand) == true)
+                    player.getHandValue(hand);
+
+                     
+                    if (player.isBlackjack(hand) == true)
                     {
                         //if (count == 0)
                         //{
@@ -342,10 +423,14 @@ from player
                         //}
                      
                         //blackjackState = true;
-                        player.displayHand(hand);
                         //System.out.println(player.getName() + " won! Get that fat stack of cash!");
-                        player.blackjackWin();
-                        player.resetPot();
+                        player.displayHand(hand); 
+                        player.blackjackWin(counter);
+                        player.resetPot(counter);
+                        
+                        double rmtemp = (1.5) * player.getPot(counter);
+                        
+                        roomMoney -= (int)rmtemp;
                         System.out.println(player.getName() + " has Blackjack so won't hit this round");
                  }
              }    
@@ -386,9 +471,11 @@ from player
                             if (response.substring(0,1).equals("Y") || response.substring(0,1).equals("y"))
                             {
                                 player.split(deck, hand);
+                                player.putMoneyInPot(player.getPot(0), 1);
+                                count++;
                             }
                         
-                        count++;
+             
                         }
                     }
                     
@@ -403,13 +490,16 @@ from player
                 
                 int handIndex = 0;
                 
+                int counting = 0;
                 for (Hand hand : player.getHandArray())
                 {    
                     int counter = 1;
                     
-                    if (player.isBlackjack(hand) == false)
+                    
+                    
+                    if (player.isBlackjack(hand) == false || player.isSplit())
                     {
-                        if (player.getMoney() >= player.getPot())
+                        if (player.getMoney() >= player.getPot(counting))
                         {
                             canDoubleDown = true;
                         }
@@ -424,12 +514,15 @@ from player
                         System.out.print("Dealer's Hand: ");
                         dealer.displayDealerHand();
                 
-                        System.out.println();
-                        player.displayHand(hand);
+                        if (player.isSplit())
+                        {
+                            System.out.println();
+                            player.displayHand(hand);
+                        }
                 
                         if (canDoubleDown && counter == 1)
                         {                           
-                            doublingDown = player.DoublingDown();
+                            doublingDown = player.DoublingDown(counting);
                             counter++;
                         }
                         else
@@ -461,7 +554,11 @@ from player
             
                             System.out.println(); 
                         }
+                        
+                        doublingDown = false;
                     }
+                    
+                    counting++;
                 }
             }
             
@@ -483,62 +580,79 @@ from player
 
                 for (Player player : players)
                 {
+                    int counter = 0;
+                    
+                    
                     for (Hand hand : player.getHandArray())
                     {
-                        //Case that player has more points, within accepted range, than dealer
-                        if (dealerPoints < player.getHandValue(hand) && player.getHandValue(hand) <= 21)
+                        System.out.println(player.getPot(counter));
+                        System.out.println(player.getHandValue(hand));
+                        
+                        if (player.isBlackjack(hand) == false || player.isSplit() == true)
                         {
-                            player.isWinner();
-                            System.out.println(player.getName() + " won!");
-                            player.regularWin();
-                            player.resetPot();
+                        
+                            //Case that player has more points, within accepted range, than dealer
+                            if (dealerPoints < player.getHandValue(hand) && player.getHandValue(hand) <= 21)
+                            {
+                                player.isWinner();
+                                System.out.println(player.getName() + " won!");
+                                player.regularWin(counter);
+                                roomMoney -= player.getPot(counter);
+                                //player.resetPot();
+                            }
+
+                            //Case that both players have same point values and is not blackjack, it is a tie
+                            else if (dealerPoints == player.getHandValue(hand) && player.getHandValue(hand) <= 21)
+                            {
+                                System.out.println("It's a tie for " + player.getName() + " and Dealer!");
+                                player.tieMoney(counter);
+                                //player.resetPot();
+                            }   
+
+                            //If dealer has more points, within accepted range, than player
+                            else if (dealerPoints > player.getHandValue(hand) && dealerPoints <= 21)
+                            {
+                                dealer.isWinner();
+                                roomMoney += player.getPot(counter);
+                                System.out.println(player.getName() + " lost.");
+                                //player.resetPot();
+                            }
+
+                            //If dealer busts and player does not
+                            else if (player.getHandValue(hand) <= 21 && dealerPoints > 21)
+                            {
+                                player.isWinner();
+
+                            /**
+                            if (player.isBlackjack() == true)
+                            {
+                            player.blackjackWin();
+                            }
+                            else
+                            */
+                                player.regularWin(counter);
+                                roomMoney -= player.getPot(counter);
+                                //player.resetPot();            
+                                System.out.println(player.getName() + " won!");
+                            }   
+                            //If player busts and dealer does not
+                            else if (dealerPoints <= 21 && player.getHandValue(hand) > 21)
+                            {
+                                dealer.isWinner();
+                                roomMoney += player.getPot(counter);
+                                System.out.println(player.getName() + " lost!");
+                                //player.resetPot();
+                            }
+                            //If everyone busts, nobody wins but player loses money
+                            else if (dealerPoints > 21 && player.getHandValue(hand) > 21)
+                            {
+                                System.out.println("Both " + player.getName() + " and Dealer lost.");
+                                roomMoney += player.getPot(counter);
+                                //player.resetPot();                
+                            }
                         }
-              
-                        //Case that both players have same point values and is not blackjack, it is a tie
-                        else if (dealerPoints == player.getHandValue(hand) && player.getHandValue(hand) <= 21)
-                        {
-                            System.out.println("It's a tie for " + player.getName() + " and Dealer!");
-                            player.tieMoney();
-                            player.resetPot();
-                        }   
-            
-                        //If dealer has more points, within accepted range, than player
-                        else if (dealerPoints > player.getHandValue(hand) && dealerPoints <= 21)
-                        {
-                            dealer.isWinner();
-                            System.out.println(player.getName() + " lost.");
-                            player.resetPot();
-                        }
-            
-                        //If dealer busts and player does not
-                        else if (player.getHandValue(hand) <= 21 && dealerPoints > 21)
-                        {
-                            player.isWinner();
-               
-                        /**
-                        if (player.isBlackjack() == true)
-                        {
-                        player.blackjackWin();
-                        }
-                        else
-                        */
-                            player.regularWin();
-                            player.resetPot();            
-                            System.out.println(player.getName() + " won!");
-                        }   
-                        //If player busts and dealer does not
-                        else if (dealerPoints <= 21 && player.getHandValue(hand) > 21)
-                        {
-                            dealer.isWinner();
-                            System.out.println(player.getName() + " lost!");
-                            player.resetPot();
-                        }
-                        //If everyone busts, nobody wins but player loses money
-                        else if (dealerPoints > 21 && player.getHandValue(hand) > 21)
-                        {
-                            System.out.println("Both " + player.getName() + " and Dealer lost.");
-                            player.resetPot();                
-                        }
+                        player.resetPot(counter);
+                        counter++;
                     }
                 }
             }
@@ -565,6 +679,8 @@ from player
                players.remove(player);
             }
          }
+         
+        //this.defaultReset();
          
          /*
          for (Player player : players)
@@ -609,10 +725,17 @@ from player
         }
     }
 }
+   
+   public void defaultReset()
+    {
+        if (isDefault)
+        {
+            roomMoney = 200000;
+        }
+    }
+   
 }
-        
-      
-      
+              
       
          
          
@@ -762,7 +885,8 @@ class Player
    private String name;
    private int win;
    private int money;
-   private int pot;
+   private int pot[];
+   private int pot1[];
    private boolean playing;
    private boolean isSplit;
    
@@ -776,8 +900,23 @@ The constructor creates the hand based off a deck entered into it. (at least for
       hand.add(initialHand);
       name = playerName;
       win = 0;
+      pot = new int[2];
+      pot1 = new int[2];
       money = 1000;
       playing = false;
+   }
+   
+   public Player(String username, int moneyStored)
+   {
+       hand = new ArrayList<Hand>();
+       initialHand = new Hand();
+       hand.add(initialHand);
+       name = username;
+       win = 0;
+       pot = new int[2];
+       pot1 = new int[2];
+       money = moneyStored;
+       playing = false;
    }
 
 /**
@@ -827,7 +966,7 @@ getUserChoice asks the user if he/she wants to hit.
       return false;
    }
    
-   public boolean DoublingDown()
+   public boolean DoublingDown(int i)
    {
        //System.out.println("Is " + player.getName() + "'s hand a blackjack? " + player.isBlackjack());
                 
@@ -845,8 +984,8 @@ getUserChoice asks the user if he/she wants to hit.
       
         if (response.substring(0,1).equals("Y") || response.substring(0,1).equals("y"))
         {
-            money -= pot;
-            pot *= 2;
+            money -= pot[i];
+            pot[i] *= 2;
             return true;
         }
       
@@ -858,6 +997,7 @@ getHandValue returns the point value of the hand.
 */   
    public int getHandValue(Hand hand)
    {
+      
       return hand.getValue();
    }
 
@@ -878,9 +1018,9 @@ Returns the amount of money a player has
       return money;
    }
    
-   public int getPot()
+   public int getPot(int i)
    {
-       return pot;
+       return pot[i];
    }
 
 /**
@@ -937,9 +1077,10 @@ Puts money amount that player enters into pot and removes
 from player
 */
    
-   public void putMoneyInPot(int betAmount)
+   public void putMoneyInPot(int betAmount, int i)
    {
-      pot = betAmount;
+      pot[i] = betAmount;
+      pot[1] = betAmount;
       money -= betAmount;
    }
 
@@ -947,9 +1088,9 @@ from player
 Resets a player's bet to 0 to use at the end of each round
 */
    
-   public void resetPot()
+   public void resetPot(int i)
    {
-      pot = 0;
+      pot[i] = 0;
    }
    
    public void resetSplit()
@@ -960,27 +1101,28 @@ Resets a player's bet to 0 to use at the end of each round
 /**
 Adds 1.5x money for a player who has a blackjack when dealer does not. Logic applied in the game function
 */   
-   public void blackjackWin()
+   public void blackjackWin(int i)
    {
-      money += (pot + 1.5 * pot);
+      double temp = (2.5) * pot[i];
+      money += (int)temp;
    }
    
 /**
 Adds money for a player who has won. Logic of when used applied in the game function
 */   
    
-   public void regularWin()
+   public void regularWin(int i)
    {
-      money += (2 * pot);
+      money += (2 * pot[i]);
    }
 
 /**
 Returns money to player from pot when it is a tie
 */
 
-   public void tieMoney()
+   public void tieMoney(int i)
    {
-      money += pot;
+      money += pot[i];
    }
    
    public void buyGameRoom(int money)
@@ -1011,6 +1153,15 @@ Returns money to player from pot when it is a tie
        
        HandList.add(hand);
        HandList.add(newHand);
+       
+       /*
+       pot[1] = pot[0];
+       
+       for (int i = 0; i <= 1; i++)
+       {
+           pot1[i] = pot[i];
+       }
+       */
        
        this.hand = HandList;
        
