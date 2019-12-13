@@ -1,110 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Scanner;
 
 /**
- * @author Mohnish
- */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author: Shaivya Gupta
+ * Tests out the blackjack game.
  */
 
-/**
- @author: Shaivya Gupta
- Tests out the blackjack game.
- */
 
-public class blackjack extends Application {
-   Blackjack game = new Blackjack();
-   game.game();
-
+public class BlackJackTester_Gupta extends Application {
+   Blackjack game = new Blackjack(); //get number of players
+   int playercount = 4; // plug in number of players
    FlowPane cards = new FlowPane(Orientation.HORIZONTAL);
    FlowPane dealerCards = new FlowPane(Orientation.HORIZONTAL);
    Label totalLabel = new Label();
    Label totalLabelDealer = new Label();
 
    Label dealerLbl = new Label("Dealer Hand");
+
+   //for statement to get player labels
    Label playerLbl = new Label("Your Hand");
 
    Label status = new Label();
    Image imageback = new Image("file:C:/Users/bmahabir/IdeaProjects/javafx card test/src/blackjack/resources/table.png");
 
-   public void drawCard(Hand hand, FlowPane pane, Label l){
-      try{
-         Card card = deck.dealCard();
-         ImageView img = new ImageView(card.getCardImage());
-         pane.getChildren().add(img);
-         hand.addCard(card);
-
-         int handTotal = hand.evaluateHand();
-
-         StringBuilder total = new StringBuilder();
-         if(hand.getSoft() > 0){
-            total.append(handTotal-10).append("/");
-         }
-         total.append(handTotal);
-         l.setText(total.toString());
-      } catch (Exception ex){
-         System.out.println(ex.getMessage());
-      }
-   }
-
-   public void newDeck(){
-      deck.restoreDeck();
-      deck.shuffle();
-      System.out.println("We'ce shuffled the deck");
-   }
-
-   public void newHand(){
-      // check if we should shuffle
-      if(deck.getNumberOfCardsRemaining() <= deck.getSizeOfDeck()*0.2){
-         newDeck();
-      }
-
-      // clear everything
-      hand.discardHand();
-      dealer.discardHand();
-      cards.getChildren().removeAll(cards.getChildren());
-      dealerCards.getChildren().removeAll(dealerCards.getChildren());
-      totalLabel.setText("");
-      totalLabelDealer.setText("");
-
-      busted = false;
-      playerTurn = true;
-
-      // draw cards for the initial hands, player gets 2, dealer 1
-      drawCard(hand, cards, totalLabel);
-      drawCard(dealer, dealerCards, totalLabelDealer);
-      drawCard(hand, cards, totalLabel);
-
-      status.setText("Your turn");
-   }
-
    @Override
-   public void start(Stage primaryStage) {
+   public void start(Stage primaryStage)  {
+
       // Update all text colors and fonts
       totalLabel.setFont(new Font("Arial", 24));
       totalLabel.setTextFill(Color.web("#FFF"));
@@ -125,58 +58,6 @@ public class blackjack extends Application {
       BackgroundImage backgroundImage = new BackgroundImage(imageback, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
       Background background = new Background(backgroundImage);
 
-      Button drawbtn = new Button();
-      drawbtn.setText("Hit");
-      drawbtn.setOnAction((e) -> {
-         if(playerTurn == true && busted != true){
-            drawCard(hand, cards, totalLabel);
-
-            if(hand.evaluateHand() > 21){
-               // you busted
-               System.out.println("You've busted");
-               busted = true;
-               playerTurn = false;
-               status.setText("You've busted");
-            }
-         }
-      });
-
-      Button standbtn = new Button();
-      standbtn.setText("Stand");
-      standbtn.setOnAction((e) -> {
-         if(playerTurn == true && busted != true){
-            playerTurn = false;
-            while(dealer.evaluateHand() < 17){
-               drawCard(dealer, dealerCards, totalLabelDealer);
-            }
-
-            int playerTotal = hand.evaluateHand();
-            int dealerTotal = dealer.evaluateHand();
-
-            System.out.println("Player Hand: "+hand);
-            System.out.println("Dealer Hand: "+dealer);
-
-            if(dealerTotal <= 21 && playerTotal == dealerTotal){
-               // tie, push
-               System.out.println("You've pushed");
-               status.setText("You've pushed");
-            } else if(dealerTotal <= 21 && playerTotal <= dealerTotal){
-               // you lost
-               System.out.println("You've lost");
-               status.setText("You've lost");
-            } else {
-               // you won
-               System.out.println("You've won");
-               status.setText("You've won");
-            }
-         }
-      });
-
-      Button newbtn = new Button();
-      newbtn.setText("New Hand");
-      newbtn.setOnAction((e) -> {
-         newHand();
-      });
 
       GridPane grid = new GridPane();
       grid.setAlignment(Pos.CENTER);
@@ -196,9 +77,9 @@ public class blackjack extends Application {
       grid.add(cards, 0, 3, 3, 1);
       grid.add(playerLbl, 0, 4);
       grid.add(totalLabel, 1, 4, 2, 1);
-      grid.add(drawbtn,0,5);
-      grid.add(standbtn,1,5);
-      grid.add(newbtn, 2, 5);
+      //grid.add(drawbtn,0,5);
+      //grid.add(standbtn,1,5);
+      //grid.add(newbtn, 2, 5);
       grid.add(status, 0, 6, 3, 1);
       grid.setBackground(background);
 
@@ -208,15 +89,16 @@ public class blackjack extends Application {
       primaryStage.setScene(scene);
       primaryStage.show();
 
-      newDeck();
-      newHand();
    }
 
    public static void main(String[] args) {
-      launch(args);
-
+      Application.launch(args);
    }
+
+
 }
+
+
 /*
 public class BlackJackTester_Gupta
 {
@@ -225,7 +107,7 @@ public class BlackJackTester_Gupta
 
 
       Blackjack game = new Blackjack();
-      game.game();
+      //game.game();
 
       /**
        MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
@@ -291,10 +173,12 @@ public class BlackJackTester_Gupta
        }
        }
        }
-
+   */
+      /*
    }
 }
 */
+
 /**
  This class creates a blackjack table with players, dealer,
  and deck. It then runs the game.
@@ -430,7 +314,6 @@ class Blackjack
          /**
           Puts money amount that player enters into pot and removes
           from player
-
 
           public void putMoneyInPot(int betAmount)
           {
@@ -1253,10 +1136,6 @@ class Card
    /**
     Constructs the card with its suit, rank, and pointValue.
     */
-   public static String getFilename(Suit suit, Rank rank ) {
-      return "file:C:/Users/bmahabir/IdeaProjects/javafx card test/src/blackjack/resources/cards/" + rank.getSymbol() + suit.getSymbol() + ".gif";
-   }
-
    public Card(String cardRank, String suitOfCard, int valueOfCard)
    {
       suit =  suitOfCard;
@@ -1314,6 +1193,12 @@ class Card
    }
 
 }
+
+
+
+
+
+
 
 class Deck
 {
@@ -1450,55 +1335,66 @@ class Deck
 
 
 
-class Hand {
+class Hand
+{
    ArrayList<Card> cards;
    int sumOfValues = 0;
    int aceCounter = 0;
 
    /**
-    * Constructs a Hand, an arrayList of cards.
+    Constructs a Hand, an arrayList of cards.
     */
-   public Hand() {
+   public Hand()
+   {
       cards = new ArrayList<Card>();
    }
 
    /**
-    * When called, it adds a card to the hand.
+    When called, it adds a card to the hand.
     */
-   public void addCard(Card card) {
+   public void addCard (Card card)
+   {
       cards.add(card);
 
-      if (card.getRank().equals("Ace")) {
+      if (card.getRank().equals("Ace"))
+      {
          aceCounter++;
       }
    }
 
    /**
-    * WHen called, it gets the value of the hand and checks
-    * to see if Ace should change from 11 points to 1 point.
+    WHen called, it gets the value of the hand and checks
+    to see if Ace should change from 11 points to 1 point.
     */
-   public int getValue() {
+   public int getValue()
+   {
       sumOfValues = 0;
 
-      for (Card card : cards) {
+      for (Card card : cards)
+      {
          sumOfValues = sumOfValues + card.getValue();
       }
 
       //Checks for aces to change their values if necessary
-      if (aceCounter > 0) {
+      if (aceCounter > 0)
+      {
 
          //Only need to change if the sumOfValues is > 21
-         if (sumOfValues > 21) {
+         if (sumOfValues > 21)
+         {
 
             //For each card in the hand
-            for (Card card : cards) {
+            for (Card card : cards)
+            {
 
                //Check if this card is an ace and that it hasn't already been set to a value of 1
-               if (card.getRank().equals("Ace") && card.getValue() != 1) {
+               if (card.getRank().equals("Ace") && card.getValue() != 1)
+               {
 
                   //If the current sum is > 21, set the Ace to a value of 1 and decrease sum by 10.
                   //Reduce aceCounter by 1 so that when no more aces can be changed again, this part of code doesn't run
-                  if (sumOfValues > 21) {
+                  if (sumOfValues > 21)
+                  {
                      card.setValue();
                      aceCounter--;
                      sumOfValues -= 10;
@@ -1510,12 +1406,13 @@ class Hand {
 
       return sumOfValues;
    }
-
    /**
-    * Checks if a hand is busted (over 21 points)
+    Checks if a hand is busted (over 21 points)
     */
-   public boolean isBusted() {
-      if (sumOfValues > 21) {
+   public boolean isBusted()
+   {
+      if (sumOfValues > 21)
+      {
          return true;
       }
 
@@ -1523,34 +1420,39 @@ class Hand {
    }
 
    /**
-    * Returns the size of the hand.
+    Returns the size of the hand.
     */
-   public int size() {
+   public int size()
+   {
       return cards.size();
    }
 
    /**
-    * Returns a card from the hand.
+    Returns a card from the hand.
     */
-   public Card get(int i) {
+   public Card get(int i)
+   {
       return cards.get(i);
    }
 
    /**
-    * Removes a card from the hand
+    Removes a card from the hand
     */
-   public Card remove(int i) {
+   public Card remove(int i)
+   {
       return cards.remove(i);
    }
 
 
    /**
-    * Returns hand in String form.
+    Returns hand in String form.
     */
-   public String toString() {
+   public String toString()
+   {
       String results = "";
 
-      for (Card card : cards) {
+      for (Card card : cards)
+      {
          results += card + "  ";
       }
 
@@ -1558,28 +1460,31 @@ class Hand {
    }
 
    /**
-    * Returns the array that makes up the hand so it
-    * can be manipulated. To remove cards from hand to
-    * deck or check if hand has ace.
+    Returns the array that makes up the hand so it
+    can be manipulated. To remove cards from hand to
+    deck or check if hand has ace.
     */
-   public ArrayList<Card> handList() {
+   public ArrayList<Card> handList()
+   {
       return cards;
    }
 
    /**
-    * Clears the hand so the hand is empty and ready
-    * to be filled again
+    Clears the hand so the hand is empty and ready
+    to be filled again
     */
 
-   public void clear() {
+   public void clear()
+   {
       cards.clear();
    }
 
-   public boolean isBlackjack() {
-      if (sumOfValues == 21 && cards.size() == 2) {
+   public boolean isBlackjack()
+   {
+      if (sumOfValues == 21 && cards.size() == 2)
+      {
          return true;
       }
       return false;
    }
-
 }
