@@ -484,7 +484,8 @@ public class BlackJackTester_Gupta
                 }
                 else 
                 {
-                    state = State.TITLE_SCREEN;
+                    System.out.println("No such room exists! Going back to manage room. Enter r to manage rooms again");
+                    state = State.MANAGE_ROOMS;
                     break;
                 }
                 scannr3 = new Scanner(System.in);
@@ -492,7 +493,7 @@ public class BlackJackTester_Gupta
                 System.out.println();
                 System.out.println("Enter w to withdraw money:");
                 System.out.println("Enter d to deposit money:");
-                System.out.println("Enter br to buy a room:");
+                //System.out.println("Enter br to buy a room:");
                 state1 = scannr3.nextLine();
                 
                 if (state1.equals("w"))
@@ -526,7 +527,7 @@ public class BlackJackTester_Gupta
                         collection.updateOne(eq("Room Name", RoomName), new Document("$set", new Document("money", mons)));
                         System.out.println();
                         System.out.println();
-                        collection.updateOne(eq("username", name), new Document("$set", new Document("money", persmons)));
+                        collection2.updateOne(eq("username", name), new Document("$set", new Document("money", persmons)));
                     }
                     
                 }
@@ -715,6 +716,7 @@ public class BlackJackTester_Gupta
                     System.out.println("Type x to Exit the App");
                     System.out.println("Type b to go back to Title Screen");
                     System.out.println("Type m to begin managing rooms");
+                    System.out.println("Type r to buy a room for $20000");
                     System.out.println();
                     System.out.println();
                     state = State.MANAGE_ROOMS;
@@ -1147,11 +1149,21 @@ and creates a blackjack game.
       deck.shuffle();
       isDefault = def;
       
+      System.out.println();
+      System.out.println();
+
+      MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+      MongoDatabase database = mongoClient.getDatabase("blackjack");
+      MongoCollection<Document> collection = database.getCollection("accounts");
+      
+      System.out.println();
+      System.out.println();
+      
       System.out.println("Welcome, everybody, to a wonderful game of 21, or Blackjack!");
       System.out.println("____________________________________________________________");
       System.out.println("How many players? 1-4 players.");
       
-      while (playerCount <= 0 || playerCount > 4)
+      while (playerCount <= 0 || playerCount > 4 || playerCount > collection.count())
       {
          Scanner scanner = new Scanner(System.in);
       
@@ -1161,6 +1173,10 @@ and creates a blackjack game.
             if (playerCount <= 0)
             {
                System.out.println("Please enter a positive number");      
+            }
+            else if (playerCount > collection.count())
+            {
+                System.out.println("Not enough accounts exist for this many players");
             }
             if (playerCount > 4)
             {
@@ -1200,14 +1216,20 @@ and creates a blackjack game.
           System.out.println();
           System.out.println();
           
-          if (login.LoginSuccessOrNah(name, password) == true)
+            Document document = collection
+                .find(new BasicDBObject("username", name))
+                .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
+                      
+          if (document != null)
+          {
+            if (login.LoginSuccessOrNah(name, password) == true)
                   {
                       condition = true;
-                      MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-                      MongoDatabase database = mongoClient.getDatabase("blackjack");
-                      MongoCollection<Document> collection = database.getCollection("accounts");
+                      mongoClient = new MongoClient( "localhost" , 27017 );
+                      database = mongoClient.getDatabase("blackjack");
+                      collection = database.getCollection("accounts");
                       
-                      Document document = collection
+                      document = collection
                             .find(new BasicDBObject("username", name))
                             .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
                       
@@ -1216,9 +1238,16 @@ and creates a blackjack game.
                       Player player = new Player(name, moneyStored); //(playername , //moneyStored);
                       players.add(player);
                   }
+            else
+            {
+                condition = false;
+                System.out.println("Incorrect password, please enter credentials again.")
+            }
+          } 
           else 
-          {
+            {
               condition = false;
+              System.out.println("No such username exists in the database. Try again.");
           }
           }
       }
