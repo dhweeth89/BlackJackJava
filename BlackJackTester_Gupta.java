@@ -70,16 +70,11 @@ public class BlackJackTester_Gupta
             LOGOUT
     }
     
+    
     public static void main(String[] args) throws NoSuchAlgorithmException
    {    
        
-       MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-       MongoDatabase database = mongoClient.getDatabase("Building");
-       MongoCollection<Document> collection = database.getCollection("Rooms");
-       
-       MongoClient mongoClient2 = new MongoClient( "localhost" , 27017 );
-       MongoDatabase database2 = mongoClient2.getDatabase("blackjack");
-       MongoCollection<Document> collection2 = database2.getCollection("accounts");
+     
                 
       int money;
       String name;
@@ -88,6 +83,14 @@ public class BlackJackTester_Gupta
       String usureusure = "";
       boolean isDefault;//mongo is false
       boolean okiedokie = false;
+      MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+      MongoDatabase database = mongoClient.getDatabase("Building");
+      MongoCollection<Document> collection = database.getCollection("Rooms");
+       
+      MongoClient mongoClient2 = new MongoClient( "localhost" , 27017 );
+      MongoDatabase database2 = mongoClient2.getDatabase("blackjack");
+      MongoCollection<Document> collection2 = database2.getCollection("accounts");
+
    
         //note:   b for BACK BUTTON
         //        r for START
@@ -96,6 +99,7 @@ public class BlackJackTester_Gupta
         //        x for EXIT
         //        i for LOGIN
         //        o for LOGOUT
+        //        l for LIST OPTIONS OF PAGE
       
       
       State state = State.TITLE_SCREEN;
@@ -103,8 +107,13 @@ public class BlackJackTester_Gupta
       //NICOLE AND MOHNISH
       //In each state, except play game state, remember to check if user presses x, it goes to a popup menu that asks if they are sure
       //If sure == true, then state = exit; then next loop, main is exited
+      
+      //System.out.println("Click enter to start the game");
+      
       while (state != State.EXIT)
       {
+        System.out.println("Type l to view options for this part of menu");
+          
         switch(state)
         {
             case TITLE_SCREEN:
@@ -116,6 +125,9 @@ public class BlackJackTester_Gupta
                 //money == ??
                 if (loggedIn == true)
                 {
+                    System.out.println("Username: " + name);
+                    System.out.println("$$$ Balance: " + money);
+                    
                     if (state1.equals("r")) //when start button is pressed, returns r for room select
                         {
                             state = State.ROOM_SELECT;
@@ -158,6 +170,15 @@ public class BlackJackTester_Gupta
                                     }
                             }
                         }
+                    else if (state1.equals("l"))
+                    {
+                         System.out.println("Type r for Room Select to play in");
+                         System.out.println("Type c for Create Account to make an account");
+                         System.out.println("Type m to Manage your Buildings, or buy your own");
+                         System.out.println("Type x to log out");
+                         System.out.println("Type x to Exit the App");
+                         state = State.TITLE_SCREEN;
+                    }
                 }
                 else //not logged in, main menue @ author NicoleSUx
                 {
@@ -176,7 +197,7 @@ public class BlackJackTester_Gupta
                      else if (state1.equals("x"))
                         {
                              Scanner input = new Scanner(System.in);
-                             System.out.println("Are you sure you would like to quit?");
+                             System.out.println("Are you sure you would like to quit? Type y or n");
                              usureusure  = input.nextLine();
                             okiedokie = false;
                             while (okiedokie == false)
@@ -194,11 +215,19 @@ public class BlackJackTester_Gupta
                                  else
                                     {
                                          Scanner input2 = new Scanner(System.in);
-                                         System.out.println("Just a simple yes or no would suffice...");
+                                         System.out.println("Just a simple y or n would suffice...");
                                          usureusure  = input2.nextLine();
                                     }
                             }
                         }
+                     else if (state1.equals("l"))
+                     {
+                         System.out.println("Type r for Room Select to play in");
+                         System.out.println("Type c for Create Account to make an account");
+                         System.out.println("Type i for Logging In to your Account; You must login once you create an account");
+                         System.out.println("Type x to Exit the App");
+                         state = State.TITLE_SCREEN;
+                     }
                 }
                 break;
             //NICOLE AND MOHNISH: Figure out how to enter account creation data to MongoDB collection users
@@ -206,6 +235,13 @@ public class BlackJackTester_Gupta
             case CREATE_ACCOUNT:
                 System.out.println("You are in create_account screen");
                 //CREATE ACCOUNT FUNCTION HERE
+                if (loggedIn)
+                {
+                    System.out.println("Username: " + name);
+                    System.out.println("$$$ Balance: " + money);
+                }
+                
+                
                 Scanner scann = new Scanner(System.in);
                 state1 = scann.nextLine();
                 
@@ -239,14 +275,18 @@ public class BlackJackTester_Gupta
                     {
                         state = State.TITLE_SCREEN;
                     }
-                else
+                else if (state.1.equals("c"))
                     {
                         //do the stuff pls @mohniSH
                         Signup signup = new Signup();
                         
+                        
+                        System.out.println("Please create a new username");
                         Scanner userscanner = new Scanner(System.in);
                         String username = userscanner.nextLine();
                         
+                        
+                        System.out.println("Please create a password");
                         Scanner passscanner = new Scanner(System.in);
                         String password = passscanner.nextLine();
                         
@@ -271,6 +311,13 @@ public class BlackJackTester_Gupta
                             }
                         }
                     }
+                    else if (state1.equals("l"))
+                     {
+                         System.out.println("Type c for Create Account to make an account");
+                         System.out.println("Type x to Exit the App");
+                         System.out.println("Type b to go back to Title Screen");
+                         state = State.CREATE_ACCOUNT;
+                     }
                 break;
                 
             case MANAGE_ROOMS: //MOHNISH  ierate thrpigh rpoms of user
@@ -283,7 +330,7 @@ public class BlackJackTester_Gupta
                 }
                 };
 
-                collection.find(gt("owner", "mo")).forEach(printBlock);
+                collection.find(gt("owner", name).forEach(printBlock);
                 
                 Scanner scannr3 = new Scanner(System.in);
                 state1 = scannr3.nextLine();
@@ -316,10 +363,27 @@ public class BlackJackTester_Gupta
                                     }
                             }
                         }
-                else if (state.equals("b"))
+                else if (state1.equals("b"))
                     {
                         state = State.TITLE_SCREEN;
                     }
+                else if (state1.equals("r"))
+                {
+                    if ()
+                    {
+                        
+                    }
+                }
+                
+                else if (state.equals("l"))
+                {
+                    System.out.println("Type a number to index a room for Create Account to make an account");
+                    System.out.println("Type x to Exit the App");
+                    System.out.println("Type b to go back to Title Screen");
+                    System.out.println("Type r to purchase a new room for $20000")
+                    state = State.MANAGE_ROOMS;
+                }
+                
                 break;
             case ROOM_SELECT: //MOHNISH
                 System.out.println("You are in room select screen");
@@ -331,7 +395,7 @@ public class BlackJackTester_Gupta
                 }
                 };
 
-                collection.find(gt("owner", "mo")).forEach(printBlock2);
+                collection.find(gt("owner", user)).forEach(printBlock2);
                 
                 
                 Scanner scannr5 = new Scanner(System.in);
@@ -2437,4 +2501,3 @@ class Building
     }
     
 }
-
