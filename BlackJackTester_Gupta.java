@@ -112,17 +112,25 @@ public class BlackJackTester_Gupta
       
       while (state != State.EXIT)
       {
-        System.out.println("Type l to view options for this part of menu");
+          System.out.println();
+          System.out.println();
+          System.out.println("Type l to view options for this part of menu");
+          System.out.println();
+          System.out.println();
           
         switch(state)
         {
             case TITLE_SCREEN:
                 System.out.println("You are in title screen");
+                System.out.println();
+                System.out.println();
                 
                 if (loggedIn == true)
                 {
                     System.out.println("Username: " + name);
                     System.out.println("$$$ Balance: " + money);
+                    System.out.println();
+                    System.out.println();
                 }
                 
                 Scanner scannr = new Scanner(System.in);
@@ -151,7 +159,12 @@ public class BlackJackTester_Gupta
                     else if (state1.equals("x"))
                         {
                              Scanner input = new Scanner(System.in);
+                             System.out.println();
+                             System.out.println();
                              System.out.println("Are you sure you would like to quit?");
+                             System.out.println();
+                             System.out.println();
+                             
                              usureusure  = input.nextLine();
                             okiedokie = false;
                             while (okiedokie == false)
@@ -169,18 +182,26 @@ public class BlackJackTester_Gupta
                                  else
                                     {
                                          //Scanner scanner1 = new Scanner(System.in);
-                                         System.out.println("Just a simple yes or no would suffice...");
-                                         usureusure  = input.nextLine();
+                                        System.out.println();
+                                        System.out.println();
+                                        System.out.println("Just a simple yes or no would suffice...");
+                                        usureusure  = input.nextLine();
+                                        System.out.println();
+                                        System.out.println();
                                     }
                             }
                         }
                     else if (state1.equals("l"))
                     {
+                         System.out.println();
+                         System.out.println();
                          System.out.println("Type r for Room Select to play in");
                          System.out.println("Type c for Create Account to make an account");
                          System.out.println("Type m to Manage your Buildings, or buy your own");
                          System.out.println("Type o to log out");
                          System.out.println("Type x to Exit the App");
+                         System.out.println();
+                         System.out.println();
                          state = State.TITLE_SCREEN;
                     }
                 }
@@ -203,7 +224,11 @@ public class BlackJackTester_Gupta
                      else if (state1.equals("x"))
                         {
                              Scanner input = new Scanner(System.in);
+                             System.out.println();
+                             System.out.println();
                              System.out.println("Are you sure you would like to quit? Type y or n");
+                             System.out.println();
+                             System.out.println();
                              usureusure  = input.nextLine();
                             okiedokie = false;
                             while (okiedokie == false)
@@ -221,17 +246,25 @@ public class BlackJackTester_Gupta
                                  else
                                     {
                                          Scanner input2 = new Scanner(System.in);
+                                         System.out.println();
+                                         System.out.println();
                                          System.out.println("Just a simple y or n would suffice...");
                                          usureusure  = input2.nextLine();
+                                         System.out.println();
+                                         System.out.println();
                                     }
                             }
                         }
                      else if (state1.equals("l"))
                      {
+                         System.out.println();
+                         System.out.println();
                          System.out.println("Type r for Room Select to play in");
                          System.out.println("Type c for Create Account to make an account");
                          System.out.println("Type p for Logging In to your Account; You must login once you create an account");
                          System.out.println("Type x to Exit the App");
+                         System.out.println();
+                         System.out.println();
                          state = State.TITLE_SCREEN;
                      }
                 }
@@ -239,12 +272,18 @@ public class BlackJackTester_Gupta
             //NICOLE AND MOHNISH: Figure out how to enter account creation data to MongoDB collection users
             //Make sure to error check that username doesn't already exist in database
             case CREATE_ACCOUNT:
+                System.out.println();
+                System.out.println();
                 System.out.println("You are in create_account screen");
+                System.out.println();
+                System.out.println();
                 //CREATE ACCOUNT FUNCTION HERE
                 if (loggedIn)
                 {
                     System.out.println("Username: " + name);
                     System.out.println("$$$ Balance: " + money);
+                    System.out.println();
+                    System.out.println();
                 }
                 
                 
@@ -256,7 +295,10 @@ public class BlackJackTester_Gupta
                              Scanner input = new Scanner(System.in);
                              System.out.println("Are you sure you would like to quit? Type y or n:");
                              usureusure  = input.nextLine();
-                            okiedokie = false;
+                             System.out.println();
+                             System.out.println();
+                            
+                             okiedokie = false;
                             while (okiedokie == false)
                             {
                                  if (usureusure.equals("y"))
@@ -274,6 +316,8 @@ public class BlackJackTester_Gupta
                                          Scanner input3 = new Scanner(System.in);
                                          System.out.println("Just a simple y or n would suffice...");
                                          usureusure  = input3.nextLine();
+                                         System.out.println();
+                                         System.out.println();
                                     }
                             }
                         }
@@ -290,17 +334,25 @@ public class BlackJackTester_Gupta
                         System.out.println("Please create a new username");
                         Scanner userscanner = new Scanner(System.in);
                         String username = userscanner.nextLine();
+                        System.out.println();
+                        System.out.println();
                         
                         
                         System.out.println("Please create a password");
                         Scanner passscanner = new Scanner(System.in);
                         String password = passscanner.nextLine();
+                        System.out.println();
+                        System.out.println();
                         
                         if (username.length() < 1 || username.length() > 10 || password.length() < 6 
                                 || password.length() > 12 )
                         {
                             //Insert alert flash messages for username/password length incorrect
+                            System.out.println();
+                            System.out.println();
                             System.out.println("Please re-enter, username must be 1-10 characters, password 6-12");
+                            System.out.println();
+                            System.out.println();
                             state = State.CREATE_ACCOUNT;
                         }
                         else 
@@ -314,41 +366,60 @@ public class BlackJackTester_Gupta
                             else
                             {
                                 //Insert alert message for username being taken
+                                System.out.println();
+                                System.out.println();
                                 System.out.println("Username already taken");
+                                System.out.println();
+                                System.out.println();
                                 state = State.CREATE_ACCOUNT;
                             }
                         }
                     }
                 else if(state1.equals("l"))
                      {
+                         System.out.println();
+                         System.out.println();
                          System.out.println("Type c for Create Account to make an account");
                          System.out.println("Type x to Exit the App");
                          System.out.println("Type b to go back to Title Screen");
+                         System.out.println();
+                         System.out.println();
                          state = State.CREATE_ACCOUNT;
                      }
                 break;
                 
             case MANAGE_ROOMS: //MOHNISH  ierate thrpigh rpoms of user
                 // ??????????????? @moHNIsh
-                
+                System.out.println();
+                System.out.println();
                 System.out.println("Username: " + name);
                 System.out.println("$$$ Balance: " + money);
+                System.out.println();
+                System.out.println();
                 
-                Block<Document> printBlock = new Block<Document>() {
-                @Override
+                List<Document> documents = (List<Document>) collection.find().into(
+				new ArrayList<Document>());
                 
-                public void apply(final Document document) {
-                System.out.println(document.toJson());
-                }
-                };
+                for(Document document : documents){
+                   System.out.println(document);
+               }
+                
+                System.out.println();
+                System.out.println();
                 
                 Document document = collection
                     .find(new BasicDBObject("owner", name))
                     .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
+                System.out.println();
+                System.out.println();
+                
                 
                 Document document2 = collection2
                     .find(new BasicDBObject("username", name))
                     .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
+                System.out.println();
+                System.out.println();
+                
                 
                 
                 
@@ -356,6 +427,8 @@ public class BlackJackTester_Gupta
                 if (document == null)
                 {
                     System.out.println("You own no rooms!");
+                    System.out.println();
+                    System.out.println();
                     Scanner scannr3 = new Scanner(System.in);
                     state1 = scannr3.nextLine();
                 }
@@ -363,22 +436,41 @@ public class BlackJackTester_Gupta
                 {    
                 
                 Scanner RoomN = new Scanner(System.in);
-                System.out.println("Enter the name of the room you would like to manage:");
+                System.out.println();
+                System.out.println();
+                System.out.println("Enter the name of the room you would like to manage ir:");
+                System.out.println();
+                System.out.println();
                 String RoomName =  RoomN.nextLine();
+                
                 
                 document = collection
                     .find(new BasicDBObject("Room Name", RoomName))
                     .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
                 
                 document2 = collection2
-                     .find(new BasicDBObject("Room Name", RoomName))
+                     .find(new BasicDBObject("username", name))
                     .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();   
                 
+                int mons;
+                int persmons;
+                
+                if (document != null && document2 != null)
+                {
                 int RoomMoney = document.getInteger("money");
+                mons = RoomMoney;
                 
                 int PersonalMoney = document2.getInteger("money");
-                
+                persmons = PersonalMoney;
+                }
+                else 
+                {
+                    state = State.TITLE_SCREEN;
+                    break;
+                }
                 Scanner scannr3 = new Scanner(System.in);
+                System.out.println();
+                System.out.println();
                 System.out.println("Enter w to withdraw money:");
                 System.out.println("Enter d to deposit money:");
                 System.out.println("Enter br to buy a room:");
@@ -388,41 +480,146 @@ public class BlackJackTester_Gupta
                 {
                     Scanner amount = new Scanner(System.in);
                     System.out.println("Enter how much you would like to withdraw:");
+                    System.out.println();
+                    System.out.println();
                     int withdraw = amount.nextInt();
                     
-                    if (withdraw > RoomMoney)
+                    
+                    
+                    if (withdraw > mons)
                     {
                         System.out.println("You can't withdraw more than you have in the room!");
+                        System.out.println();
+                        System.out.println();
                     }
                     else if (withdraw <= 0)
                     {
                         System.out.println("Don't do negative numbers or zero");
+                        System.out.println();
+                        System.out.println();
                     }
                     else 
                     {
-                        RoomMoney = RoomMoney - withdraw;
-                        collection.updateOne(eq("Room Name", RoomName), new Document("$set", new Document("money", RoomMoney)));
+                        mons = mons - withdraw;
+                        persmons = persmons + withdraw;
+                        System.out.println();
+                        System.out.println();
+                        collection.updateOne(eq("Room Name", RoomName), new Document("$set", new Document("money", mons)));
+                        System.out.println();
+                        System.out.println();
+                        collection.updateOne(eq("username", name), new Document("$set", new Document("money", persmons)));
                     }
                     
                 }
                 else if(state1.equals("d"))
                 {
                     Scanner amount2 = new Scanner(System.in);
-                    System.out.println("Enter how much you would like to withdraw:");
+                    System.out.println("Enter how much you would like to deposit:");
                     int deposit = amount2.nextInt();
+                    System.out.println();
+                    System.out.println();
                     
-                    if (deposit > PersonalMoney)
+                    if (deposit > persmons)
                     {
                         System.out.println("You can't deposit more money than you have!");
+                        System.out.println();
+                        System.out.println();
                     }
                     else
                     {
-                        RoomMoney = RoomMoney + deposit;
-                        PersonalMoney = PersonalMoney - deposit;
-                        collection.updateOne(eq("Room Name", RoomName), new Document("$set", new Document("money", RoomMoney)));
-                        collection.updateOne(eq("username", name), new Document("$set", new Document("money", PersonalMoney)));
+                        mons = mons + deposit;
+                        persmons = persmons - deposit;
+                        System.out.println();
+                        System.out.println();
+                        collection.updateOne(eq("Room Name", RoomName), new Document("$set", new Document("money", mons)));
+                        System.out.println();
+                        System.out.println();
+                        collection2.updateOne(eq("username", name), new Document("$set", new Document("money", persmons)));
                     }
+                    if (state1.equals("x"))
+                        {
+                             Scanner input = new Scanner(System.in);
+                             System.out.println("Are you sure you would like to quit?");
+                             usureusure  = input.nextLine();
+                             System.out.println();
+                             System.out.println();
+                            
+                             okiedokie = false;
+                            while (okiedokie == false)
+                            {
+                                 if (usureusure.equals("y"))
+                                     {
+                                         okiedokie = true;
+                                         state = State.EXIT;
+                                     }
+                                 else if (usureusure.equals("n"))
+                                     {
+                                         okiedokie = true;
+                                         state = State.MANAGE_ROOMS;
+                                     }
+                                 else
+                                    {
+                                         Scanner input4 = new Scanner(System.in);
+                                         System.out.println("Just a simple yes or no would suffice...");
+                                         usureusure  = input4.nextLine();
+                                         System.out.println();
+                                         System.out.println();
+                                    }
+                            }
+                        }
+                else if (state1.equals("b"))
+                    {
+                        state = State.TITLE_SCREEN;
+                    }
+                else if (state1.equals("r"))
+                {
+                    if(money < 20000)
+                    {
+                        System.out.println("You don't have enough money to buy a room!");
+                        System.out.println();
+                        System.out.println();
+                    }
+                    else 
+                    {
+                      
+                    Building building = new Building();
+                    
+                        if (building.CreateRoom(name) == true)
+                        {
+                            System.out.println("Your room has been successfully created");
+                            System.out.println();
+                            System.out.println();
+                        }
+                        else 
+                        {
+                            System.out.println("You don't have enough money to buy a room!");
+                            System.out.println();
+                            System.out.println();
+                            state = State.TITLE_SCREEN;
+                        }
+                    }
+                }
+                
+                else if (state1.equals("l"))
+                {
+                    System.out.println("Type a number to index a room for Create Account to make an account");
+                    System.out.println("Type x to Exit the App");
+                    System.out.println("Type b to go back to Title Screen");
+                    System.out.println("Type r to purchase a new room for $20000");
+                   
+                    if (document != null)
+                    {
+                        System.out.println("Type d to deposit money to a building you will specify by typing its name");
+                        System.out.println("Type w to desposit money to a building you will specify by typing its name");
+                    }
+                    System.out.println();
+                    System.out.println();
+                    state = State.MANAGE_ROOMS;
+                }
                  }
+                
+                
+                money = persmons;
                 }
                 
                 
@@ -439,6 +636,8 @@ public class BlackJackTester_Gupta
                              Scanner input = new Scanner(System.in);
                              System.out.println("Are you sure you would like to quit?");
                              usureusure  = input.nextLine();
+                             System.out.println();
+                             System.out.println();
                             okiedokie = false;
                             while (okiedokie == false)
                             {
@@ -468,6 +667,8 @@ public class BlackJackTester_Gupta
                 {
                     if(money < 20000)
                     {
+                        System.out.println();
+                        System.out.println();
                         System.out.println("You don't have enough money to buy a room!");
                     }
                     else 
@@ -477,10 +678,14 @@ public class BlackJackTester_Gupta
                     
                         if (building.CreateRoom(name) == true)
                         {
+                            System.out.println();
+                            System.out.println();
                             System.out.println("Your room has been successfully created");
                         }
                         else 
                         {
+                            System.out.println();
+                            System.out.println();
                             System.out.println("You don't have enough money to buy a room!");
                             state = State.MANAGE_ROOMS;
                         }
@@ -489,6 +694,8 @@ public class BlackJackTester_Gupta
                 
                 else if (state1.equals("l"))
                 {
+                    System.out.println();
+                    System.out.println();
                     System.out.println("Type a number to index a room for Create Account to make an account");
                     System.out.println("Type x to Exit the App");
                     System.out.println("Type b to go back to Title Screen");
@@ -499,17 +706,23 @@ public class BlackJackTester_Gupta
                         System.out.println("Type d to deposit money to a building you will specify by typing its name");
                         System.out.println("Type w to desposit money to a building you will specify by typing its name");
                     }
+                    System.out.println();
+                    System.out.println();
                     state = State.MANAGE_ROOMS;
                 }
                 
                 break;
             case ROOM_SELECT: //MOHNISH
                 System.out.println("You are in room select screen");
+                System.out.println();
+                System.out.println();
                 
                 Block<Document> printBlock2 = new Block<Document>() {
                 @Override
                 public void apply(final Document document) {
                 System.out.println(document.toJson());
+                System.out.println();
+                System.out.println();
                 }
                 };
                
@@ -520,6 +733,8 @@ public class BlackJackTester_Gupta
                 System.out.println("Enter the name of the room you would like to play in");
                 System.out.println("Type 'Guest', without the '', to play a guest game, without logging in");
                 System.out.println("Type 'Default', without the '', to play against a bot");
+                System.out.println();
+                System.out.println();
                 
                 
                 MongoCursor<Document> cursor = collection.find().iterator();
@@ -534,6 +749,9 @@ public class BlackJackTester_Gupta
                 Scanner RM = new Scanner(System.in);
                 System.out.println("Enter the name of the room you would like to play in:");
                 String Roomname = RoomName.nextLine(); 
+                System.out.println();
+                System.out.println();
+                
                 int moolas;
                 
                 if (!Roomname.equals("Default") || !Roomname.equals("Guest"))
@@ -541,7 +759,8 @@ public class BlackJackTester_Gupta
                     document = collection
                         .find(new BasicDBObject("Room Name", Roomname))
                         .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
-                    
+                    System.out.println();
+                    System.out.println();
                     
                     if (document != null)
                     {
@@ -549,6 +768,7 @@ public class BlackJackTester_Gupta
                         moolas = monetary;
                         
                         Blackjack room = new Blackjack(Roomname, moolas, false);
+                        room.game();
                     }
                 }
                 
@@ -559,7 +779,7 @@ public class BlackJackTester_Gupta
                     Blackjack room = new Blackjack();
                     room.game();
                 }
-                else if (Roomname.equals("Default"))r
+                else if (Roomname.equals("Default"))
                 {
                     Blackjack room = new Blackjack(Roomname, 2000000, true);
                     room.game();
@@ -607,47 +827,6 @@ public class BlackJackTester_Gupta
                 
                 state = State.TITLE_SCREEN;
                 break;
-            case PLAY_GAME: //NICOLE
-                System.out.println("You are in play_game screen");
-                //select room
-                Scanner scannr7 = new Scanner(System.in);
-                state1 = scannr7.nextLine();
-                
-                if (state1.equals("x"))
-                        {
-                             Scanner input = new Scanner(System.in);
-                             System.out.println("Are you sure you would like to quit?");
-                             usureusure  = input.nextLine();
-                            okiedokie = false;
-                            while (okiedokie == false)
-                            {
-                                 if (usureusure.equals("y"))
-                                     {
-                                         okiedokie = true;
-                                         state = State.EXIT;
-                                     }
-                                 else if (usureusure.equals("n"))
-                                     {
-                                         okiedokie = true;
-                                         state = State.PLAY_GAME;
-                                     }
-                                 else
-                                    {
-                                         Scanner input9 = new Scanner(System.in);
-                                         System.out.println("Just a simple yes or no would suffice...");
-                                         usureusure  = input9.nextLine();
-                                    }
-                            }
-                        }
-                else if (state1.equals("b"))
-                    {
-                        state = State.ROOM_SELECT;
-                    }
-                
-                //Blackjack game = new Blackjack();    
-                //game.game();
-                //state = State.TITLE_SCREEN;
-                
             case EXIT:
                 break;
             case LOGIN: //MOHNISH
@@ -744,13 +923,19 @@ public class BlackJackTester_Gupta
                 
             case LOGOUT:
                 
+                System.out.println();
+                System.out.println();
                 System.out.println("Username: " + name);
                 System.out.println("Money: " + money);
                 
+                System.out.println();
+                System.out.println();
                 System.out.println("You are in logout screen");
                 Scanner input = new Scanner(System.in);
                 System.out.println("Are you sure you would like to logout? (yes or no)");
                 usureusure  = input.nextLine();
+                System.out.println();
+                System.out.println();
              
                 okiedokie = false;
                 while (okiedokie == false)
@@ -774,6 +959,8 @@ public class BlackJackTester_Gupta
                                 Scanner input12 = new Scanner(System.in);
                                 System.out.println("Just a simple yes or no would suffice...");
                                 usureusure  = input12.nextLine();
+                                System.out.println();
+                                System.out.println();
                             }
                     }
                 break;
@@ -979,34 +1166,30 @@ and creates a blackjack game.
       }
   
       players = new ArrayList<Player>(); 
-/**      
-      for (int i = 0; i < playerCount; i++)
-      {
-         Scanner scanner = new Scanner(System.in);
-         System.out.println("What will your name be, player " + (i+1) + "?");
-         String playerName = scanner.nextLine();
-         Player player = new Player(playerName);
-         players.add(player);
-      }
-*/     
+        
       
     dealer = new Dealer();
       
-      for (int i = 0; 1 < playerCount; i++)
+      for (int i = 0; i < playerCount; i++)
       {
           Login login = new Login();
           boolean condition = false;
           
           while(condition == false)
           {
+          System.out.println("Enter your Username: ");
+          System.out.println();
+          System.out.println();
           Scanner user = new Scanner(System.in);
-          System.out.print("Enter your Username:");
           String name = user.nextLine();
+          System.out.println();
+          System.out.println();
           
-          
+          System.out.println("Enter your Password:");
           Scanner pass = new Scanner(System.in);
-          System.out.print("Enter your Password:");
           String password = pass.nextLine();
+          System.out.println();
+          System.out.println();
           
           if (login.LoginSuccessOrNah(name, password) == true)
                   {
@@ -1025,7 +1208,9 @@ and creates a blackjack game.
                       players.add(player);
                   }
           else 
+          {
               condition = false;
+          }
           }
       }
    }
@@ -1402,8 +1587,6 @@ from player
                     
                     for (Hand hand : player.getHandArray())
                     {
-                        System.out.println(player.getPot(counter));
-                        System.out.println(player.getHandValue(hand));
                         
                         if (player.isBlackjack(hand) == false || player.isSplit() == true)
                         {
@@ -1483,10 +1666,26 @@ from player
          {
             player.clearHand();
             player.resetSplit();
+            
+            MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+            MongoDatabase database = mongoClient.getDatabase("blackjack");
+            MongoCollection<Document> collection = database.getCollection("accounts");
+            
+            System.out.println();
+            collection.updateOne(eq("username", player.getName()), new Document("$set", new Document("money", player.getMoney())));
+            System.out.println();
          }
          
-         
+            MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+            MongoDatabase database = mongoClient.getDatabase("Building");
+            MongoCollection<Document> collection = database.getCollection("Rooms");
+            
+            System.out.println();
+            collection.updateOne(eq("Room Name", this.buildingName ), new Document("$set", new Document("money", roomMoney)));
+            System.out.println();
+            
          dealer.clearHand();
+         
          
          for (Player player : new ArrayList<Player>(players))
          {
