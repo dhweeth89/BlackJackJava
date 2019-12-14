@@ -541,7 +541,9 @@ public class BlackJackTester_Gupta
                         state = State.TITLE_SCREEN;
                     }
             case LOGOUT:
-                System.out.println("You arein logout screen");
+                System.out.println("You are in logout screen");
+                System.out.println("press x to Exit");
+                System.out.println("press o to log out");
                 Scanner input = new Scanner(System.in);
                 System.out.println("Are you sure you would like to logout? (yes or no)");
                 usureusure  = input.nextLine();
@@ -575,6 +577,7 @@ public class BlackJackTester_Gupta
                             }
                         }
                 okiedokie = false;
+                if(state1.equals("o")) {
                 while (okiedokie == false)
                     {
                         if (usureusure.equals("y"))
@@ -598,6 +601,7 @@ public class BlackJackTester_Gupta
                                 usureusure  = input12.nextLine();
                             }
                     }
+                }
                 break;
         }
       }
