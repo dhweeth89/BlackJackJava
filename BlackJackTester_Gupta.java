@@ -76,9 +76,9 @@ public class BlackJackTester_Gupta
        
      
                 
-      int money;
-      String name;
-      String building_name;
+      int money = 0;
+      String name = "";
+      String building_name = "";
       boolean loggedIn = false;
       String usureusure = "";
       boolean isDefault;//mongo is false
@@ -275,7 +275,7 @@ public class BlackJackTester_Gupta
                     {
                         state = State.TITLE_SCREEN;
                     }
-                else if (state.1.equals("c"))
+                else if (state1.equals("c"))
                     {
                         //do the stuff pls @mohniSH
                         Signup signup = new Signup();
@@ -296,7 +296,7 @@ public class BlackJackTester_Gupta
                             //Insert alert flash messages for username/password length incorrect
                             state = State.CREATE_ACCOUNT;
                         }
-                        else
+                        else 
                         {
                             boolean isValid = signup.MakeAccount(username, password);
                         
@@ -311,7 +311,7 @@ public class BlackJackTester_Gupta
                             }
                         }
                     }
-                    else if (state1.equals("l"))
+                else if(state1.equals("l"))
                      {
                          System.out.println("Type c for Create Account to make an account");
                          System.out.println("Type x to Exit the App");
@@ -329,8 +329,87 @@ public class BlackJackTester_Gupta
                 System.out.println(document.toJson());
                 }
                 };
-
-                collection.find(gt("owner", name).forEach(printBlock);
+                
+                Document document = collection
+                    .find(new BasicDBObject("owner", name))
+                    .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
+                
+                Document document2 = collection2
+                    .find(new BasicDBObject("username", name))
+                    .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
+                
+                
+                
+                if (document == null)
+                {
+                    System.out.println("You own no rooms!");
+                }
+                else
+                {    
+                
+                Scanner RoomN = new Scanner(System.in);
+                System.out.println("Enter the name of the room you would like to manage:");
+                String RoomName =  RoomN.nextLine();
+                
+                document = collection
+                    .find(new BasicDBObject("Room Name", RoomName))
+                    .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
+                
+                document2 = collection2
+                     .find(new BasicDBObject("Room Name", RoomName))
+                    .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();   
+                
+                int RoomMoney = document.getInteger("money");
+                
+                int PersonalMoney = document2.getInteger("money");
+                
+                Scanner key = new Scanner(System.in);
+                System.out.println("Enter w to withdraw money:");
+                System.out.println("Enter d to deposit money:");
+                System.out.println("Enter br to buy a room:");
+                String input = key.nextLine();
+                
+                if (input.equals("w"))
+                {
+                    Scanner amount = new Scanner(System.in);
+                    System.out.println("Enter how much you would like to withdraw:");
+                    int withdraw = amount.nextInt();
+                    
+                    if (withdraw > RoomMoney)
+                    {
+                        System.out.println("You can't withdraw more than you have in the room!");
+                    }
+                    else 
+                    {
+                        RoomMoney = RoomMoney - withdraw;
+                        collection.updateOne(eq("Room Name", RoomName), new Document("$set", new Document("money", RoomMoney)));
+                    }
+                    
+                }
+                else if(input.equals("d"))
+                {
+                    Scanner amount2 = new Scanner(System.in);
+                    System.out.println("Enter how much you would like to withdraw:");
+                    int deposit = amount2.nextInt();
+                    
+                    if (deposit > PersonalMoney)
+                    {
+                        System.out.println("You can't deposit more money than you have!");
+                    }
+                    else
+                    {
+                        RoomMoney = RoomMoney + deposit;
+                        PersonalMoney = PersonalMoney - deposit;
+                        collection.updateOne(eq("Room Name", RoomName), new Document("$set", new Document("money", RoomMoney)));
+                        collection.updateOne(eq("username", name), new Document("$set", new Document("money", PersonalMoney)));
+                    }
+                 }
+                }
+                
+                
+                
+                
+                
                 
                 Scanner scannr3 = new Scanner(System.in);
                 state1 = scannr3.nextLine();
@@ -369,9 +448,17 @@ public class BlackJackTester_Gupta
                     }
                 else if (state1.equals("r"))
                 {
-                    if ()
+                    Building building = new Building();
+                    
+                    building.CreateRoom(name);
+                    
+                    if (building.CreateRoom(name) == true)
                     {
-                        
+                        System.out.println("Your room has been successfully created");
+                    }
+                    else 
+                    {
+                        state = State.MANAGE_ROOMS;
                     }
                 }
                 
@@ -380,7 +467,7 @@ public class BlackJackTester_Gupta
                     System.out.println("Type a number to index a room for Create Account to make an account");
                     System.out.println("Type x to Exit the App");
                     System.out.println("Type b to go back to Title Screen");
-                    System.out.println("Type r to purchase a new room for $20000")
+                    System.out.println("Type r to purchase a new room for $20000");
                     state = State.MANAGE_ROOMS;
                 }
                 
@@ -394,10 +481,22 @@ public class BlackJackTester_Gupta
                 System.out.println(document.toJson());
                 }
                 };
+               
+                
+                collection.find(gt("owner", name)).forEach(printBlock2);
+                
+                Scanner RoomName = new Scanner(System.in);
+                System.out.println("Enter the name of the room you would like to play in:");
+                String Roomname = RoomName.nextLine();
+                
+                document = collection
+                    .find(new BasicDBObject("owner", name))
+                    .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
+                
+                int monetary = document.getInteger("money");
+                Blackjack room = new Blackjack(Roomname, monetary);
 
-                collection.find(gt("owner", user)).forEach(printBlock2);
-                
-                
+                              
                 Scanner scannr5 = new Scanner(System.in);
                 state1 = scannr5.nextLine();
                 
@@ -500,11 +599,12 @@ public class BlackJackTester_Gupta
                     if (login.LoginSuccessOrNah(usernameEntered, passwordEntered) == true)
                     {
                         name = usernameEntered;
-                        Document document = collection
+                        document = collection
                             .find(new BasicDBObject("username", usernameEntered))
                             .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
                         money = document.getInteger("money");
                         usernameEntered = name;
+                        
                     }
                 //Check with MongoDB to ensure that both username entered and password entered are correct
                 //if (userNameEntered == )
@@ -540,6 +640,12 @@ public class BlackJackTester_Gupta
                     {
                         state = State.TITLE_SCREEN;
                     }
+                else if (state1.equals("l"))
+                {
+                    System.out.println("Type x to exit app");
+                    System.out.println("Type b to go back to title screen");
+                    System.out.println("Type z to begin the login process");
+                }
             case LOGOUT:
                 System.out.println("You arein logout screen");
                 Scanner input = new Scanner(System.in);
@@ -2212,7 +2318,7 @@ class Signup
         
         
         
-        Document username = new Document("username", Authentication(user))
+        Document username = new Document("username", user)
                 .append("password", toHexString(getSHA(pass)))
                 .append("money", money);
         collection.insertOne(username);
