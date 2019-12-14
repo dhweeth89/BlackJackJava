@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="guitest.Controller">
+    <children>
+        <ImageView fitHeight="487.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../blackjackmenu.jpg" />
+            </image>
+        </ImageView>
+        <Button fx:id="Startbutton" layoutX="259.0" layoutY="116.0" mnemonicParsing="false" onAction="#Start" text="Start Game" />
+        <Button fx:id="Createbutton" layoutX="260.0" layoutY="161.0" mnemonicParsing="false" onAction="#Create" text="Create Account" />
+        <Button fx:id="loginbutton" layoutX="261.0" layoutY="256.0" mnemonicParsing="false" onAction="#login" text="Login" />
+        <Button fx:id="Managebutton" layoutX="259.0" layoutY="208.0" mnemonicParsing="false" onAction="#Manage" text="Manage Rooms" />
+        <Text fontSmoothingType="LCD" layoutX="225.0" layoutY="67.0" stroke="#2e452f" strokeType="OUTSIDE" strokeWidth="0.0" text="Blackjack" wrappingWidth="266.4617614746094">
+            <font>
+                <Font name="Javanese Text" size="42.0" />
+            </font>
+        </Text>
+    </children>
+</AnchorPane>
