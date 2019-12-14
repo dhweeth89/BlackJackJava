@@ -294,6 +294,7 @@ public class BlackJackTester_Gupta
                                 || password.length() > 12 )
                         {
                             //Insert alert flash messages for username/password length incorrect
+                            System.out.println("Please re-enter, username must be 1-10 characters, password 6-12");
                             state = State.CREATE_ACCOUNT;
                         }
                         else 
@@ -307,6 +308,7 @@ public class BlackJackTester_Gupta
                             else
                             {
                                 //Insert alert message for username being taken
+                                System.out.println("Username already taken");
                                 state = State.CREATE_ACCOUNT;
                             }
                         }
