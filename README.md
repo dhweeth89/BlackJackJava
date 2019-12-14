@@ -9,9 +9,14 @@ This modern take on a classic game explores themes of strategy, comedy, and Java
 
 
 To run this game, it is requried to have an up-to-date version of Java (preferably JDK 13). MongoDB driver and compass are also required to play. These can be downloaded through their respective links:
+
       driver: https://www.mongodb.com/download-center/community
+      
       compass: https://www.mongodb.com/download-center/compass
+      
       installation guide (driver): https://github.com/dhweeth89/BlackJackJava/blob/master/Mon-god-help-me%20copy.pdf
+      
       installation guide (compass): https://docs.mongodb.com/compass/master/install/
+
 
 JavaFX is also used as the gameʻs GUI!
