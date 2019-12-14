@@ -20,3 +20,6 @@ To run this game, it is requried to have an up-to-date version of Java (preferab
 
 
 JavaFX is also used as the gameʻs GUI!
+
+We used JavaFX 13. After JDK 10 JavaFX became a seperate SDK that one must install seperatly to get started with JavaFX. 
+The one must link the library for JavaFX and its runtime to the project in order for the GUI to run. Sadely we did not have enough time to implement the GUI with the backend code so for now its just a pretty show of what could have been.
