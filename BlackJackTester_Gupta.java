@@ -534,31 +534,38 @@ public class BlackJackTester_Gupta
                 Scanner RM = new Scanner(System.in);
                 System.out.println("Enter the name of the room you would like to play in:");
                 String Roomname = RoomName.nextLine(); 
+                int moolas;
                 
-                document = collection
-                    .find(new BasicDBObject("Room Name", Roomname))
-                    .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
-                                
-                int monetary = document.getInteger("money");
+                if (!Roomname.equals("Default") || !Roomname.equals("Guest"))
+                {
+                    document = collection
+                        .find(new BasicDBObject("Room Name", Roomname))
+                        .projection(Projections.fields(Projections.include("money"), Projections.excludeId())).first();
+                    
+                    
+                    if (document != null)
+                    {
+                        int monetary = document.getInteger("money");
+                        moolas = monetary;
+                        
+                        Blackjack room = new Blackjack(Roomname, moolas, false);
+                    }
+                }
                 
-                                
                 
-                if (Roomname == "Guest" || Roomname == "guest" || Roomname == "GUEST")
+                
+                if (Roomname.equals("Guest"))
                 {
                     Blackjack room = new Blackjack();
                     room.game();
                 }
-                else if (Roomname == "Default" || Roomname == "default" || Roomname == "DEFAULT")
+                else if (Roomname.equals("Default"))r
                 {
                     Blackjack room = new Blackjack(Roomname, 2000000, true);
                     room.game();
                 }
-                else
-                {
-                    Blackjack room = new Blackjack(Roomname, monetary, false);
-                }
 
-                              
+                /**              
                 Scanner scannr5 = new Scanner(System.in);
                 state1 = scannr5.nextLine();
                 
@@ -598,7 +605,7 @@ public class BlackJackTester_Gupta
                 
                 */
                 
-                
+                state = State.TITLE_SCREEN;
                 break;
             case PLAY_GAME: //NICOLE
                 System.out.println("You are in play_game screen");
