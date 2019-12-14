@@ -385,7 +385,7 @@ public class BlackJackTester_Gupta
                     }
 
                     break;
-                case ROOM_SELECT: //MOHNISH
+                case ROOM_SELECT: //@uthor the gaang
                     System.out.println("You are in room select screen");
 
                     Block<Document> printBlock2 = new Block<Document>() {
@@ -431,12 +431,20 @@ public class BlackJackTester_Gupta
                     {
                         state = State.TITLE_SCREEN;
                     }
+                    else if (state.equals("l"))
+                    {
+                        System.out.println("Type b to go back to Title Screen");
+                        System.out.println("Type r to purchase a new room for $20000")
+                        System.out.println("Type x to Exit the App");
+                        state = State.ROOM_SELECT;
+                    }
+                    else if (state.equals("r")) //@MOHNISH  TO PURCHASE ROOM
+
                     /**
                      *
                      *
 
                      */
-
 
                     break;
                 case PLAY_GAME: //NICOLE
